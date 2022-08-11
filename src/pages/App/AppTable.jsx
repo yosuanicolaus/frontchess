@@ -25,7 +25,7 @@ function AppTable() {
   return (
     <table class="table table-hover">
       <thead>
-        <tr>
+        <tr className="text-bg-secondary">
           <th scope="col">#</th>
           <th scope="col">Username</th>
           <th scope="col">ELO</th>

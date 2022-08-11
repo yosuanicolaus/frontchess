@@ -1,3 +1,4 @@
+import AppRoom from "./AppRoom";
 import AppTable from "./AppTable";
 
 function App() {
@@ -8,15 +9,12 @@ function App() {
       </div>
       <main className="p-3 row">
         <div className="col-md-6 shadow">
-          <div className="lead">Lobby</div>
+          <div className="lead my-2">Lobby</div>
           <AppTable />
         </div>
 
-        <div className="col-md-6">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit ipsam
-          quaerat veniam placeat perferendis adipisci, voluptatibus laboriosam
-          repudiandae maxime suscipit magnam porro amet eaque vero, architecto
-          reprehenderit ad modi possimus?
+        <div className="col-md-6 d-flex flex-column gap-3">
+          <AppRoom />
         </div>
       </main>
     </div>
