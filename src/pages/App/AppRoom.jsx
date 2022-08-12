@@ -1,14 +1,20 @@
 import React, { useState } from "react";
 
 function AppRoom() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState("");
 
   const joinRandomMatch = () => {
-    setLoading(true);
+    if (loading) return;
+    setLoading("Looking for a match...");
+  };
+
+  const createNewRoom = () => {
+    if (loading) return;
+    setLoading("Creating a new room...");
   };
 
   const cancel = () => {
-    setLoading(false);
+    setLoading("");
   };
 
   return (
@@ -39,7 +45,10 @@ function AppRoom() {
         >
           Join Random
         </button>
-        <button className="btn btn-outline-primary flex-grow-1">
+        <button
+          className="btn btn-outline-primary flex-grow-1"
+          onClick={createNewRoom}
+        >
           Create Room
         </button>
       </div>
@@ -47,7 +56,7 @@ function AppRoom() {
       {loading && (
         <div>
           <span className="spinner-border text-primary"></span>
-          <span className="mx-3">Looking for a match...</span>
+          <span className="mx-3">{loading}</span>
           <button className="btn btn-sm btn-outline-dark" onClick={cancel}>
             Cancel
           </button>
