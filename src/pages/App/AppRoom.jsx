@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { io } from "socket.io-client";
+
+const socket = io();
 
 function AppRoom() {
   const [loading, setLoading] = useState("");
@@ -16,6 +19,17 @@ function AppRoom() {
   const cancel = () => {
     setLoading("");
   };
+
+  useEffect(() => {
+    socket.on("room_joined", (data) => {
+      console.log("someone joined our room!");
+      console.log(data);
+    });
+
+    return () => {
+      socket.off("room_joined");
+    };
+  }, []);
 
   return (
     <>
