@@ -23,7 +23,7 @@ function AppTable() {
   ];
 
   return (
-    <table class="table table-hover">
+    <table className="table table-hover">
       <thead>
         <tr className="text-bg-secondary">
           <th scope="col">#</th>

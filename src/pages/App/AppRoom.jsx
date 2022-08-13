@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import { apiTest } from "../../helper/api";
 
 const socket = io();
 
@@ -11,9 +12,13 @@ function AppRoom() {
     setLoading("Looking for a match...");
   };
 
-  const createNewRoom = () => {
+  const createNewRoom = async () => {
     if (loading) return;
     setLoading("Creating a new room...");
+
+    const data = await apiTest();
+    cancel();
+    console.log(data);
   };
 
   const cancel = () => {
