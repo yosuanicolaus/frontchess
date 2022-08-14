@@ -3,6 +3,21 @@ import { useNavigate } from "react-router-dom";
 function Navbar() {
   const navigate = useNavigate();
 
+  const navItems = [
+    {
+      href: "/",
+      text: "Home",
+    },
+    {
+      href: "/game",
+      text: "Game",
+    },
+    {
+      href: "/login",
+      text: "Login",
+    },
+  ];
+
   const checkActive = (tab) => {
     const path = window.location.pathname.split("/")[1];
     if (tab === path) {
@@ -36,16 +51,17 @@ function Navbar() {
         </button>
         <div className="collapse navbar-collapse" id="myNavbar">
           <ul className="navbar-nav me-auto">
-            <li className="nav-item">
-              <a className={checkActive("")} href="/" onClick={goTo}>
-                Home
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className={checkActive("game")} href="/game" onClick={goTo}>
-                Play
-              </a>
-            </li>
+            {navItems.map(({ href, text }) => (
+              <li className="nav-item">
+                <a
+                  className={checkActive(href.slice(1))}
+                  href={href}
+                  onClick={goTo}
+                >
+                  {text}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
