@@ -1,20 +1,21 @@
+import Navbar from "../../components/Navbar";
 import AppRoom from "./AppRoom";
 import AppTable from "./AppTable";
 
 function App() {
   return (
     <div>
-      <div className="display-6 p-3 d-flex shadow text-bg-primary">
-        LogiChess
-      </div>
-      <main className="p-3 row">
-        <div className="col-md-6 shadow">
-          <div className="lead my-2">Lobby</div>
-          <AppTable />
-        </div>
+      <Navbar />
+      <main className="container-fluid">
+        <div className="p-3 row">
+          <div className="col-md-6 shadow mb-3">
+            <div className="lead my-2">Lobby</div>
+            <AppTable />
+          </div>
 
-        <div className="col-md-6 d-flex flex-column gap-3">
-          <AppRoom />
+          <div className="col-md-6 d-flex flex-column gap-3">
+            <AppRoom />
+          </div>
         </div>
       </main>
     </div>
