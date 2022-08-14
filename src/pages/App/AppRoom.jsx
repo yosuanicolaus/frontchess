@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../components/Loading";
 import { postGameNew } from "../../helper/api";
 
 function AppRoom() {
@@ -16,12 +17,7 @@ function AppRoom() {
     setLoading("Creating a new room...");
 
     const data = await postGameNew();
-    cancel();
     navigate(`game/${data.game._id}`);
-  };
-
-  const cancel = () => {
-    setLoading(false);
   };
 
   return (
@@ -63,15 +59,7 @@ function AppRoom() {
         </button>
       </div>
 
-      {loading && (
-        <div>
-          <span className="spinner-border text-primary"></span>
-          <span className="mx-3">{loading}</span>
-          <button className="btn btn-sm btn-outline-dark" onClick={cancel}>
-            Cancel
-          </button>
-        </div>
-      )}
+      {loading && <Loading text={loading} setLoading={setLoading} />}
     </>
   );
 }
