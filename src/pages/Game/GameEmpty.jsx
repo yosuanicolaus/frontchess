@@ -1,9 +1,7 @@
-import Navbar from "../../components/Navbar";
-
 function GameEmpty() {
   return (
     <>
-      <Navbar />
+      <h1>GameEmpty page</h1>
     </>
   );
 }

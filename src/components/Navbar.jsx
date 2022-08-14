@@ -20,7 +20,7 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-md navbar-dark bg-primary">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand" href="/" onClick={goTo}>
           LogiChess
         </a>
         <button
