@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
+  const navigate = useNavigate();
+
   const checkActive = (tab) => {
     const path = window.location.pathname.split("/")[1];
     if (tab === path) {
@@ -8,8 +12,13 @@ function Navbar() {
     }
   };
 
+  const goTo = (e) => {
+    e.preventDefault();
+    navigate(e.target.pathname);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav className="navbar navbar-expand-md navbar-dark bg-primary">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           LogiChess
@@ -28,12 +37,12 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="myNavbar">
           <ul className="navbar-nav me-auto">
             <li className="nav-item">
-              <a className={checkActive("")} href="/">
+              <a className={checkActive("")} href="/" onClick={goTo}>
                 Home
               </a>
             </li>
             <li className="nav-item">
-              <a className={checkActive("game")} href="/game">
+              <a className={checkActive("game")} href="/game" onClick={goTo}>
                 Play
               </a>
             </li>
