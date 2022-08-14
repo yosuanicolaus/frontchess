@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { io } from "socket.io-client";
-import { apiTest } from "../../helper/api";
-
-const socket = io();
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { postGameNew } from "../../helper/api";
 
 function AppRoom() {
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const joinRandomMatch = () => {
     if (loading) return;
@@ -16,25 +15,14 @@ function AppRoom() {
     if (loading) return;
     setLoading("Creating a new room...");
 
-    const data = await apiTest();
+    const data = await postGameNew();
     cancel();
-    console.log(data);
+    navigate(`game/${data.game._id}`);
   };
 
   const cancel = () => {
-    setLoading("");
+    setLoading(false);
   };
-
-  useEffect(() => {
-    socket.on("room_joined", (data) => {
-      console.log("someone joined our room!");
-      console.log(data);
-    });
-
-    return () => {
-      socket.off("room_joined");
-    };
-  }, []);
 
   return (
     <>
@@ -45,16 +33,19 @@ function AppRoom() {
         >
           Join Room:
         </label>
-        <input
-          type="text"
-          name="joinRoom"
-          id="joinRoom"
-          placeholder="insert room ID here..."
-          className="form-control"
-        />
-        <button type="submit" className="btn btn-primary">
-          Join
-        </button>
+
+        <div className="input-group">
+          <input
+            type="text"
+            name="joinRoom"
+            id="joinRoom"
+            placeholder="insert room ID here..."
+            className="form-control"
+          />
+          <button type="submit" className="btn btn-primary">
+            Join
+          </button>
+        </div>
       </div>
 
       <div className="d-flex gap-3">

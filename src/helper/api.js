@@ -9,6 +9,12 @@ export async function getAllGames() {
   return data;
 }
 
+export async function postGameNew() {
+  const response = await axios.post("/game/new");
+  const data = await response.data;
+  return data;
+}
+
 export async function apiTest() {
   const response = await axios.get("/test");
   const data = await response.data;
