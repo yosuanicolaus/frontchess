@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { auth } from "../helper/firebase-config";
+import { auth } from "../helper/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -80,9 +80,9 @@ function UserInfo({ checkActive, goTo }) {
 
   return (
     <li className="nav-item ms-auto">
-      {user.uid ? (
+      {user?.uid ? (
         <a href="/user" className={checkActive("user")} onClick={goTo}>
-          {user.email ? user.email : `Anonymous ${user.uid.slice(0, 5)}`}
+          {user.displayName || user.uid}
         </a>
       ) : (
         <a href="/login" className={checkActive("login")} onClick={goTo}>
