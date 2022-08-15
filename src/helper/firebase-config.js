@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
@@ -12,5 +12,18 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+signInAnonymously(auth).then(() => {
+  console.log("signed in anonymously");
+});
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("user is signed in");
+    console.log(user);
+  } else {
+    console.log("user is signed out");
+  }
+});
 
 export { auth };

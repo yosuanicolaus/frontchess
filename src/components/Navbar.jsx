@@ -1,3 +1,6 @@
+import React, { useState } from "react";
+import { auth } from "../helper/firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
@@ -11,10 +14,6 @@ function Navbar() {
     {
       href: "/game",
       text: "Game",
-    },
-    {
-      href: "/login",
-      text: "Login",
     },
   ];
 
@@ -50,7 +49,7 @@ function Navbar() {
           <span className="navbar-toggler-icon" />
         </button>
         <div className="collapse navbar-collapse" id="myNavbar">
-          <ul className="navbar-nav me-auto">
+          <ul className="navbar-nav flex-grow-1">
             {navItems.map(({ href, text }) => (
               <li className="nav-item" key={href}>
                 <a
@@ -62,10 +61,33 @@ function Navbar() {
                 </a>
               </li>
             ))}
+            <UserInfo checkActive={checkActive} goTo={goTo} />
           </ul>
         </div>
       </div>
     </nav>
+  );
+}
+
+function UserInfo({ checkActive, goTo }) {
+  const [user, setUser] = useState({});
+
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  });
+
+  return (
+    <li className="nav-item ms-auto">
+      {user ? (
+        <a href="/user" className={checkActive("user")} onClick={goTo}>
+          {user.email ? user.email : `Anonymous ${user.uid.slice(0, 3)}`}
+        </a>
+      ) : (
+        <a href="/login" className={checkActive("login")} onClick={goTo}>
+          Login
+        </a>
+      )}
+    </li>
   );
 }
 
