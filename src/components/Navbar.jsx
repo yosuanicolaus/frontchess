@@ -52,7 +52,7 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="myNavbar">
           <ul className="navbar-nav me-auto">
             {navItems.map(({ href, text }) => (
-              <li className="nav-item">
+              <li className="nav-item" key={href}>
                 <a
                   className={checkActive(href.slice(1))}
                   href={href}
