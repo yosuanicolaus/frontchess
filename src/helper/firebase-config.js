@@ -1,17 +1,16 @@
-import dotenv from "dotenv";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
-dotenv.config();
-
 const firebaseConfig = {
-  apiKey: process.env.apiKey,
-  authDomain: process.env.authDomain,
-  projectId: process.env.projectId,
-  storageBucket: process.env.storageBucket,
-  messagingSenderId: process.env.messagingSenderId,
-  appId: process.env.appId,
+  apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
+  authDomain: "logichess-b55af.firebaseapp.com",
+  projectId: "logichess-b55af",
+  storageBucket: "logichess-b55af.appspot.com",
+  messagingSenderId: "1059982282051",
+  appId: "1:1059982282051:web:a73b309e107298104973f6",
 };
+
+console.log(firebaseConfig);
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
