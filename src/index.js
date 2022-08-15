@@ -12,14 +12,16 @@ import Login from "./pages/Login/Login";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/game" element={<GameEmpty />} />
-        <Route path="/game/:id" element={<Game />} />
-      </Routes>
-    </Router>
+    <main className="d-flex flex-column min-vh-100">
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/game" element={<GameEmpty />} />
+          <Route path="/game/:id" element={<Game />} />
+        </Routes>
+      </Router>
+    </main>
   </React.StrictMode>
 );
