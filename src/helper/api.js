@@ -10,9 +10,9 @@ export async function getAllGames() {
   return data;
 }
 
-export async function postGameNew() {
+export async function postGameNew(timeControl) {
   const username = auth.currentUser.displayName || auth.currentUser.uid;
-  const response = await axios.post("/game/new", { username });
+  const response = await axios.post("/game/new", { username, timeControl });
   const data = await response.data;
   return data;
 }
