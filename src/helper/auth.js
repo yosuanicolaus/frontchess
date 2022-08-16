@@ -22,7 +22,7 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     console.log("user is signed in");
     if (user.isAnonymous) {
-      updateProfile(user, { displayName: `Anonymous ${user.uid.slice(0, 7)}` });
+      updateProfile(user, { displayName: `Anonymous ${user.uid.slice(0, 8)}` });
     }
     console.log(user.displayName);
   } else {

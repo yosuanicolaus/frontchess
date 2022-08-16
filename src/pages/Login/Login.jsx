@@ -3,8 +3,8 @@ function Login() {
     <main className="flex-grow-1 d-flex align-items-center justify-content-center">
       <section className="container mw-500px border shadow p-3">
         <h3>Login</h3>
+        <hr />
         <form>
-          <hr />
           <label htmlFor="loginEmail" className="form-label">
             Email:
           </label>
