@@ -4,28 +4,28 @@ import { auth } from "./auth";
 // axios = axios.create({ baseURL: "http://localhost:3001/" });
 axios.defaults.baseURL = "http://localhost:3001/";
 
-export async function getAllGames() {
+export function getAllGames() {
   return apiGet("/");
 }
 
-export async function postGameNew(timeControl) {
+export function postGameNew(timeControl) {
   const user = auth.currentUser;
   const username = user.displayName || user.uid;
   return apiPost("/game/new", { username, timeControl });
 }
 
-export async function deleteGame(gameID) {
+export function deleteGame(gameID) {
   // TODO:
   // backend: create api route /delete/game/:id
   // then call that route here
   console.log("deleted game with id", gameID);
 }
 
-export async function getGameByID(gameID) {
+export function getGame(gameID) {
   return apiGet(`/game/${gameID}`);
 }
 
-export async function apiTest() {
+export function apiTest() {
   return apiGet("/test");
 }
 

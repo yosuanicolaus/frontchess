@@ -1,4 +1,4 @@
-import { apiTest, getAllGames, getGameByID, postGameNew } from "../helper/api";
+import { apiTest, getAllGames, getGame, postGameNew } from "../helper/api";
 
 function Test() {
   const logApi = (apiFunction, ...args) => {
@@ -14,7 +14,7 @@ function Test() {
 
       <button onClick={() => logApi(apiTest)}>apiTest</button>
       <button onClick={() => logApi(getAllGames)}>getAllGames</button>
-      <button onClick={() => logApi(getGameByID, "62fae59f4839113851860177")}>
+      <button onClick={() => logApi(getGame, "62fae59f4839113851860177")}>
         getGameByID
       </button>
       <button onClick={() => logApi(postGameNew, "12+6")}>postGameNew</button>
