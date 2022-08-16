@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-import { postGameNew } from "../../helper/api";
 
 function AppRoom() {
   const [loading, setLoading] = useState(false);
@@ -14,10 +13,7 @@ function AppRoom() {
 
   const createNewRoom = async () => {
     if (loading) return;
-    setLoading("Creating a new room...");
-
-    const data = await postGameNew();
-    navigate(`game/${data.game._id}`);
+    navigate("/game");
   };
 
   return (

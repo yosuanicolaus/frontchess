@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
+import { postGameNew } from "../../helper/api";
 
 const minutesPerSide = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30,
@@ -13,6 +15,7 @@ const DEFAULT_MINUTE = 10;
 const DEFAULT_INCREMENT = 5;
 
 function GameEmpty() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [timeControl, setTimeControl] = useState(
     `${DEFAULT_MINUTE}+${DEFAULT_INCREMENT}`
@@ -31,7 +34,10 @@ function GameEmpty() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(`Creating game (${timeControl})`);
-    // TODO: make api call and redirect to game/:id
+    const data = await postGameNew(timeControl);
+    const gameID = data.game._id;
+    // TODO: handle if user clicked cancel
+    navigate(`/game/${gameID}`);
   };
 
   useEffect(() => {
