@@ -14,6 +14,10 @@ export function postGameNew(timeControl) {
   return apiPost("/game/new", { username, timeControl });
 }
 
+export function postGameJoin(gameID, username) {
+  return apiPost(`/game/${gameID}/join`, { username });
+}
+
 export function deleteGame(gameID) {
   // TODO:
   // backend: create api route /delete/game/:id
@@ -45,6 +49,6 @@ async function apiPost(path, postData) {
     const data = await response.data;
     return data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 }
