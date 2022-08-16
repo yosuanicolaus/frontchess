@@ -7,8 +7,14 @@ import { socket } from "../../helper/socket";
 
 function AppRoom() {
   const [loading, setLoading] = useState(false);
+  const [invalid, setInvalid] = useState(false);
   const [joinID, setJoinID] = useState("");
   const navigate = useNavigate();
+
+  const handleChangeJoin = (e) => {
+    setJoinID(e.target.value);
+    setInvalid(false);
+  };
 
   const handleSubmitJoin = (e) => {
     if (loading) return;
@@ -22,6 +28,7 @@ function AppRoom() {
     if (typeof data === "string") {
       // handle error
       setLoading(false);
+      setInvalid(data);
       console.log(data);
       return;
     }
@@ -57,16 +64,17 @@ function AppRoom() {
             name="joinRoom"
             id="joinRoom"
             placeholder="insert room ID here..."
-            className="form-control"
+            className={invalid ? "form-control is-invalid" : "form-control"}
             autoComplete="off"
-            onChange={(e) => setJoinID(e.target.value)}
+            onChange={handleChangeJoin}
+            required
           />
           <button type="submit" className="btn btn-primary">
             Join
           </button>
+          {invalid && <span className="invalid-feedback">{invalid}</span>}
         </div>
       </form>
-      {/* TODO: add error message when failed to join room */}
 
       <div className="d-flex gap-3">
         <button
