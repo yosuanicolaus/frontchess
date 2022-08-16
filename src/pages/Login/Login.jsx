@@ -1,9 +1,7 @@
-import "./style.css";
-
 function Login() {
   return (
     <main className="flex-grow-1 d-flex align-items-center justify-content-center">
-      <section className="container border shadow p-3">
+      <section className="container mw-500px border shadow p-3">
         <h3>Login</h3>
         <form>
           <hr />
