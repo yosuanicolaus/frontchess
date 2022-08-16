@@ -9,6 +9,7 @@ import Game from "./pages/Game/Game";
 import GameEmpty from "./pages/Game/GameEmpty";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login/Login";
+import Test from "./components/Test";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,6 +20,7 @@ root.render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/test" element={<Test />} />
           <Route path="/game" element={<GameEmpty />} />
           <Route path="/game/:id" element={<Game />} />
         </Routes>
