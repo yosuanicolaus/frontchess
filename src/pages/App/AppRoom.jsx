@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-import { postGameJoin } from "../../helper/api";
+import { getGameRandomOpen, postGameJoin } from "../../helper/api";
 import { auth } from "../../helper/auth";
 import { socket } from "../../helper/socket";
 
 function AppRoom() {
   const [loading, setLoading] = useState(false);
   const [invalid, setInvalid] = useState(false);
+  const [noGame, setNoGame] = useState(false);
   const [joinID, setJoinID] = useState("");
   const navigate = useNavigate();
 
   const handleChangeJoin = (e) => {
     setJoinID(e.target.value);
     setInvalid(false);
+    setNoGame(false);
   };
 
   const handleSubmitJoin = (e) => {
@@ -37,9 +39,18 @@ function AppRoom() {
     navigate(`/game/${gameID}`);
   };
 
-  const joinRandomMatch = () => {
+  const joinRandomMatch = async () => {
     if (loading) return;
-    setLoading("Looking for a match...");
+    setLoading("Looking for an open game...");
+    const data = await getGameRandomOpen();
+    if (typeof data === "string") {
+      setLoading(false);
+      setInvalid(false);
+      setNoGame(data);
+      return;
+    }
+    setJoinID(data.game._id);
+    joinGame(data.game._id);
   };
 
   const createNewRoom = () => {
@@ -72,9 +83,10 @@ function AppRoom() {
           <button type="submit" className="btn btn-primary">
             Join
           </button>
-          {invalid && <span className="invalid-feedback">{invalid}</span>}
         </div>
       </form>
+      {invalid && <div className="text-danger text-sm-center">{invalid}</div>}
+      {noGame && <div className="text-warning text-sm-center">{noGame}</div>}
 
       <div className="d-flex gap-3">
         <button
