@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { getGameRandomOpen, postGameJoin } from "../../helper/api";
 import { auth } from "../../helper/auth";
-import { socket } from "../../helper/socket";
 
 function AppRoom() {
   const [loading, setLoading] = useState(false);
@@ -35,7 +34,6 @@ function AppRoom() {
       return;
     }
     console.log(data);
-    socket.emit("join", gameID);
     navigate(`/game/${gameID}`);
   };
 

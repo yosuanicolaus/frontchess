@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { postGameNew } from "../../helper/api";
-import { socket } from "../../helper/socket";
 
 const minutesPerSide = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 25, 30,
@@ -38,7 +37,6 @@ function GameEmpty() {
     const data = await postGameNew(timeControl);
     const gameID = data.game._id;
     // TODO: handle if user clicked cancel
-    socket.emit("join", gameID);
     navigate(`/game/${gameID}`);
   };
 
