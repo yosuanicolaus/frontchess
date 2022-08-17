@@ -8,6 +8,10 @@ export function getAllGames() {
   return apiGet("/");
 }
 
+export function getGameRandomOpen() {
+  return apiGet("/game/random/open");
+}
+
 export function postGameNew(timeControl) {
   const user = auth.currentUser;
   const username = user.displayName || user.uid;
@@ -39,7 +43,7 @@ async function apiGet(path) {
     const data = await response.data;
     return data;
   } catch (error) {
-    console.log(error);
+    return error.response.data;
   }
 }
 
