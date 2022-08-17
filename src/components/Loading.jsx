@@ -7,9 +7,11 @@ function Loading({ text, setLoading }) {
     <div>
       <span className="spinner-border text-primary"></span>
       <span className="mx-3">{text}</span>
-      <button className="btn btn-sm btn-outline-dark" onClick={cancel}>
-        Cancel
-      </button>
+      {setLoading && (
+        <button className="btn btn-sm btn-outline-dark" onClick={cancel}>
+          Cancel
+        </button>
+      )}
     </div>
   );
 }
