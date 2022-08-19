@@ -33,8 +33,12 @@ export function getGame(gameID) {
   return apiGet(`/game/${gameID}`);
 }
 
-export function apiTest() {
-  return apiGet("/test");
+export function postUserNew(uid) {
+  return apiPost("/user/new", { uid });
+}
+
+export function getUser(uid) {
+  return apiGet(`/user/${uid}`);
 }
 
 async function apiGet(path) {

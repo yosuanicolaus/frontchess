@@ -1,4 +1,18 @@
-import { apiTest, getAllGames, getGame, postGameNew } from "../helper/api";
+import {
+  getAllGames,
+  getGame,
+  postGameNew,
+  postUserNew,
+  getUser,
+} from "../helper/api";
+
+const testData = [
+  [getAllGames],
+  [getGame, "somegameid"],
+  [postGameNew, "12+6"],
+  [postUserNew, "qwertyzxcvnice25"],
+  [getUser, "qwertyzxcvnice25"],
+];
 
 function Test() {
   const logApi = (apiFunction, ...args) => {
@@ -12,12 +26,9 @@ function Test() {
     <>
       <h1>Test Page</h1>
 
-      <button onClick={() => logApi(apiTest)}>apiTest</button>
-      <button onClick={() => logApi(getAllGames)}>getAllGames</button>
-      <button onClick={() => logApi(getGame, "62fae59f4839113851860177")}>
-        getGameByID
-      </button>
-      <button onClick={() => logApi(postGameNew, "12+6")}>postGameNew</button>
+      {testData.map((args) => (
+        <button onClick={() => logApi(...args)}>{args[0].name}</button>
+      ))}
     </>
   );
 }
