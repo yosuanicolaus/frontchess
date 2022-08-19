@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { auth } from "../helper/auth";
-import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../helper/auth";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -70,23 +68,17 @@ function Navbar() {
 }
 
 function UserInfo({ checkActive, goTo }) {
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-  }, []);
+  const { user } = useAuth();
 
   return (
     <li className="nav-item ms-auto">
-      {user?.uid ? (
+      {user?.name ? (
         <a href="/user" className={checkActive("user")} onClick={goTo}>
-          {user.displayName || user.uid}
+          {user.name}
         </a>
       ) : (
         <a href="/login" className={checkActive("login")} onClick={goTo}>
-          Login
+          Signing in ...
         </a>
       )}
     </li>

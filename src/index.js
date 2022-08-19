@@ -10,10 +10,11 @@ import GameEmpty from "./pages/Game/GameEmpty";
 import Navbar from "./components/Navbar";
 import Login from "./pages/Login/Login";
 import Test from "./components/Test";
+import { AuthProvider } from "./helper/auth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
+  <AuthProvider>
     <main className="d-flex flex-column min-vh-100">
       <Router>
         <Navbar />
@@ -26,5 +27,5 @@ root.render(
         </Routes>
       </Router>
     </main>
-  </React.StrictMode>
+  </AuthProvider>
 );
