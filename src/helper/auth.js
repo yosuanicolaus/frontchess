@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
+import { postUserNew } from "./api";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
@@ -18,19 +19,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
     console.log("user is signed in");
-    if (user.isAnonymous) {
-      updateProfile(user, { displayName: `Anonymous ${user.uid.slice(0, 8)}` });
-    }
-    console.log(user.displayName);
   } else {
-    console.log("user is signed out, signing in anonymously");
-    signInAnonymously(auth).then(() => {
-      console.log("signed in anonymously");
+    console.log("new user detected, signing in anonymously");
+
+    signInAnonymously(auth).then(async (auth) => {
+      const user = await postUserNew(auth.user.uid);
+
+      await updateProfile(auth.user, { displayName: user.name });
     });
   }
 });
+
+// TODO: create useAuth hook, use context & provider
 
 export { auth };
