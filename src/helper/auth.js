@@ -1,3 +1,4 @@
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -18,21 +19,46 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const AuthContext = createContext();
 
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("user is signed in");
-  } else {
-    console.log("new user detected, signing in anonymously");
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
-    signInAnonymously(auth).then(async (auth) => {
-      const user = await postUserNew(auth.user.uid);
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState();
 
-      await updateProfile(auth.user, { displayName: user.name });
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("user is signed in");
+        setUser({
+          name: user.displayName,
+          uid: user.uid,
+        });
+      } else {
+        console.log("new user detected, signing in anonymously");
+        const userCredential = await signInAnonymously(auth);
+        const authUser = userCredential.user;
+        const userDB = await postUserNew(authUser.uid);
+        await updateProfile(authUser, { displayName: userDB.name });
+        setUser({
+          name: authUser.displayName,
+          uid: authUser.uid,
+        });
+      }
     });
-  }
-});
+  }, []);
 
-// TODO: create useAuth hook, use context & provider
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+}
 
 export { auth };
