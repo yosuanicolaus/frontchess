@@ -49,6 +49,21 @@ export function useApi() {
       return apiPost(`/game/${id}/join`, { uid });
     },
 
+    postGameLeave: function (id) {
+      const { uid } = user;
+      return apiPost(`/game/${id}/leave`, { uid });
+    },
+
+    postGameReady: function (id) {
+      const { uid } = user;
+      return apiPost(`/game/${id}/ready`, { uid });
+    },
+
+    postGameStart: function (id) {
+      const { uid } = user;
+      return apiPost(`/game/${id}/start`, { uid });
+    },
+
     postUserNew: function () {
       const { uid } = user;
       return apiPost("/user/new", { uid });
@@ -57,6 +72,20 @@ export function useApi() {
     getUser: function () {
       const { uid } = user;
       return apiGet(`/user/${uid}`);
+    },
+
+    postChatNew: function () {
+      return apiPost("/chat/new");
+    },
+
+    getChat: function (id) {
+      return apiGet(`/chat/${id}`);
+    },
+
+    postChatNewMessage: function (id, text) {
+      const username = user.name;
+      const uid = user.uid;
+      return apiPost(`/chat/${id}/new-message`, { text, username, uid });
     },
   };
 }
