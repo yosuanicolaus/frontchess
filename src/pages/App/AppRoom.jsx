@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
-import { getGameRandomOpen, postGameJoin } from "../../helper/api";
-import { auth } from "../../helper/auth";
+import { useApi } from "../../helper/api";
 
 function AppRoom() {
+  const { postGameJoin, getGameRandomOpen } = useApi();
   const [loading, setLoading] = useState(false);
   const [invalid, setInvalid] = useState(false);
   const [noGame, setNoGame] = useState(false);
@@ -23,9 +23,9 @@ function AppRoom() {
     joinGame(joinID);
   };
 
-  const joinGame = async (gameID) => {
-    setLoading(`Joining game ${gameID}...`);
-    const data = await postGameJoin(gameID, auth.currentUser.displayName);
+  const joinGame = async (id) => {
+    setLoading(`Joining game ${id}...`);
+    const data = await postGameJoin(id);
     if (typeof data === "string") {
       // handle error
       setLoading(false);
@@ -34,7 +34,7 @@ function AppRoom() {
       return;
     }
     console.log(data);
-    navigate(`/game/${gameID}`);
+    navigate(`/game/${id}`);
   };
 
   const joinRandomMatch = async () => {
@@ -47,8 +47,8 @@ function AppRoom() {
       setNoGame(data);
       return;
     }
-    setJoinID(data.game._id);
-    joinGame(data.game._id);
+    setJoinID(data._id);
+    joinGame(data._id);
   };
 
   const createNewRoom = () => {

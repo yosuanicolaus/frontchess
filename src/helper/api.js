@@ -1,47 +1,9 @@
 import axios from "axios";
-import { auth } from "./auth";
+import { useAuth } from "./auth";
 
-// axios = axios.create({ baseURL: "http://localhost:3001/" });
 axios.defaults.baseURL = "http://localhost:3001/";
 
-export function getAllGames() {
-  return apiGet("/");
-}
-
-export function getGameRandomOpen() {
-  return apiGet("/game/random/open");
-}
-
-export function postGameNew(timeControl) {
-  const user = auth.currentUser;
-  const username = user.displayName || user.uid;
-  return apiPost("/game/new", { username, timeControl });
-}
-
-export function postGameJoin(gameID, username) {
-  return apiPost(`/game/${gameID}/join`, { username });
-}
-
-export function deleteGame(gameID) {
-  // TODO:
-  // backend: create api route /delete/game/:id
-  // then call that route here
-  console.log("deleted game with id", gameID);
-}
-
-export function getGame(gameID) {
-  return apiGet(`/game/${gameID}`);
-}
-
-export function postUserNew(uid) {
-  return apiPost("/user/new", { uid });
-}
-
-export function getUser(uid) {
-  return apiGet(`/user/${uid}`);
-}
-
-async function apiGet(path) {
+const apiGet = async (path) => {
   try {
     const response = await axios.get(path);
     const data = await response.data;
@@ -49,9 +11,9 @@ async function apiGet(path) {
   } catch (error) {
     return error.response.data;
   }
-}
+};
 
-async function apiPost(path, postData) {
+const apiPost = async (path, postData) => {
   try {
     const response = await axios.post(path, postData);
     const data = await response.data;
@@ -59,4 +21,65 @@ async function apiPost(path, postData) {
   } catch (error) {
     return error.response.data;
   }
+};
+
+export function useApi() {
+  const { user } = useAuth();
+  const { uid } = user;
+
+  return {
+    getAllData: function () {
+      return apiGet("/");
+    },
+
+    getGame: function (id) {
+      return apiGet(`/game/${id}`);
+    },
+
+    getGameRandomOpen: function () {
+      return apiGet("/game/random/open");
+    },
+
+    postGameNew: function (timeControl) {
+      return apiPost("/game/new", { uid, timeControl });
+    },
+
+    postGameJoin: function (id) {
+      return apiPost(`/game/${id}/join`, { uid });
+    },
+
+    postGameLeave: function (id) {
+      return apiPost(`/game/${id}/leave`, { uid });
+    },
+
+    postGameReady: function (id) {
+      return apiPost(`/game/${id}/ready`, { uid });
+    },
+
+    postGameStart: function (id) {
+      return apiPost(`/game/${id}/start`, { uid });
+    },
+
+    getUser: function () {
+      return apiGet(`/user/${uid}`);
+    },
+
+    postChatNew: function () {
+      return apiPost("/chat/new");
+    },
+
+    getChat: function (id) {
+      return apiGet(`/chat/${id}`);
+    },
+
+    postChatNewMessage: function (id, text) {
+      const username = user.name;
+      const uid = user.uid;
+      return apiPost(`/chat/${id}/new-message`, { text, username, uid });
+    },
+  };
+}
+
+export function firstSignIn(uid) {
+  return apiPost("/user/new", { uid });
 }
