@@ -7,7 +7,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { postUserNew } from "./api";
-import Loading from "../components/Loading";
+import LoadingPage from "../components/LoadingPage";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
@@ -65,7 +65,7 @@ export function AuthProvider({ children }) {
         user,
       }}
     >
-      {loading ? <Loading text={"signing in"} /> : <>{children}</>}
+      {loading ? <LoadingPage text={"Signing in..."} /> : <>{children}</>}
     </AuthContext.Provider>
   );
 }

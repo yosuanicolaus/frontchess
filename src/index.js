@@ -14,8 +14,8 @@ import { AuthProvider } from "./helper/auth";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <AuthProvider>
-    <main className="d-flex flex-column min-vh-100">
+  <main className="d-flex flex-column min-vh-100">
+    <AuthProvider>
       <Router>
         <Navbar />
         <Routes>
@@ -26,6 +26,6 @@ root.render(
           <Route path="/game/:id" element={<Game />} />
         </Routes>
       </Router>
-    </main>
-  </AuthProvider>
+    </AuthProvider>
+  </main>
 );

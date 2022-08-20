@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { socket } from "../../helper/socket";
-import Loading from "../../components/Loading";
+import LoadingPage from "../../components/LoadingPage";
 // import { auth } from "../../helper/auth";
 // TODO: set what user can control with auth
 
@@ -37,12 +37,7 @@ function Game() {
     socket.emit("join", id);
   }, [id]);
 
-  if (!gameDB)
-    return (
-      <main className="flex-grow-1 d-flex justify-content-center align-items-center">
-        <Loading text={"fetching game from DB..."} />
-      </main>
-    );
+  if (!gameDB) return <LoadingPage text={"fetching game from DB..."} />;
 
   return (
     <main>

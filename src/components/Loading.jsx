@@ -4,9 +4,9 @@ function Loading({ text, setLoading }) {
   };
 
   return (
-    <div>
+    <div className="d-flex">
       <span className="spinner-border text-primary"></span>
-      <span className="mx-3">{text}</span>
+      <span className="mx-3 my-auto lead">{text}</span>
       {setLoading && (
         <button className="btn btn-sm btn-outline-dark" onClick={cancel}>
           Cancel
