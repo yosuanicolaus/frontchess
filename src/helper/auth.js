@@ -7,6 +7,7 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { postUserNew } from "./api";
+import Loading from "../components/Loading";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
@@ -21,31 +22,39 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const AuthContext = createContext();
 
+/**
+ * returns { user } that have "name" and "uid"
+ * as its property, which you can then use to
+ * call /game & /user API or emit socket events
+ */
 export function useAuth() {
   return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
+      let authUser;
       if (user) {
         console.log("user is signed in");
-        setUser({
-          name: user.displayName,
-          uid: user.uid,
-        });
+        authUser = user;
       } else {
         console.log("new user detected, signing in anonymously");
         const userCredential = await signInAnonymously(auth);
-        const authUser = userCredential.user;
-        const userDB = await postUserNew(authUser.uid);
-        await updateProfile(authUser, { displayName: userDB.name });
-        setUser({
-          name: authUser.displayName,
-          uid: authUser.uid,
-        });
+        const anonymousUser = userCredential.user;
+        const userDB = await postUserNew(anonymousUser.uid);
+        await updateProfile(anonymousUser, { displayName: userDB.name });
+        authUser = anonymousUser;
+      }
+
+      authUser.name = authUser.displayName;
+      const { name, uid } = authUser;
+      if (name && uid) {
+        setUser({ name, uid });
+        setLoading(false);
       }
     });
   }, []);
@@ -56,7 +65,7 @@ export function AuthProvider({ children }) {
         user,
       }}
     >
-      {children}
+      {loading ? <Loading text={"signing in"} /> : <>{children}</>}
     </AuthContext.Provider>
   );
 }
