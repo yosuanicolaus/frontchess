@@ -6,8 +6,8 @@ import {
   onAuthStateChanged,
   updateProfile,
 } from "firebase/auth";
-import { postUserNew } from "./api";
 import LoadingPage from "../components/LoadingPage";
+import { firstSignIn } from "./api";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
@@ -42,12 +42,16 @@ export function AuthProvider({ children }) {
         console.log("user is signed in");
         authUser = user;
       } else {
-        console.log("new user detected, signing in anonymously");
-        const userCredential = await signInAnonymously(auth);
-        const anonymousUser = userCredential.user;
-        const userDB = await postUserNew(anonymousUser.uid);
-        await updateProfile(anonymousUser, { displayName: userDB.name });
-        authUser = anonymousUser;
+        try {
+          console.log("new user detected, signing in anonymously");
+          const userCredential = await signInAnonymously(auth);
+          const anonymousUser = userCredential.user;
+          const userDB = await firstSignIn(anonymousUser.uid);
+          await updateProfile(anonymousUser, { displayName: userDB.name });
+          authUser = anonymousUser;
+        } catch (error) {
+          console.log(error);
+        }
       }
 
       authUser.name = authUser.displayName;

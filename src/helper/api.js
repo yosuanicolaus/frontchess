@@ -3,28 +3,28 @@ import { useAuth } from "./auth";
 
 axios.defaults.baseURL = "http://localhost:3001/";
 
+const apiGet = async (path) => {
+  try {
+    const response = await axios.get(path);
+    const data = await response.data;
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+const apiPost = async (path, postData) => {
+  try {
+    const response = await axios.post(path, postData);
+    const data = await response.data;
+    return data;
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
 export function useApi() {
   const { user } = useAuth();
-
-  const apiGet = async (path) => {
-    try {
-      const response = await axios.get(path);
-      const data = await response.data;
-      return data;
-    } catch (error) {
-      return error.response.data;
-    }
-  };
-
-  const apiPost = async (path, postData) => {
-    try {
-      const response = await axios.post(path, postData);
-      const data = await response.data;
-      return data;
-    } catch (error) {
-      return error.response.data;
-    }
-  };
 
   return {
     getAllData: function () {
@@ -64,11 +64,6 @@ export function useApi() {
       return apiPost(`/game/${id}/start`, { uid });
     },
 
-    postUserNew: function () {
-      const { uid } = user;
-      return apiPost("/user/new", { uid });
-    },
-
     getUser: function () {
       const { uid } = user;
       return apiGet(`/user/${uid}`);
@@ -88,4 +83,8 @@ export function useApi() {
       return apiPost(`/chat/${id}/new-message`, { text, username, uid });
     },
   };
+}
+
+export function firstSignIn(uid) {
+  return apiPost("/user/new", { uid });
 }

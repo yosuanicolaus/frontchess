@@ -16,7 +16,6 @@ function Test() {
     postGameNew,
     postGameReady,
     postGameStart,
-    postUserNew,
   } = useApi();
 
   const testData = [
@@ -28,7 +27,6 @@ function Test() {
     [postGameLeave, "MeUWJyMeS6"],
     [postGameReady, "MeUWJyMeS6"],
     [postGameStart, "MeUWJyMeS6"],
-    [postUserNew],
     [getUser, "n5AmNbrFeagvCS1cpffrEWAgqNw2"],
     [postChatNew],
     [getChat, "62feff3bf529befef32e3e28"],
