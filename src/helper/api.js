@@ -25,6 +25,7 @@ const apiPost = async (path, postData) => {
 
 export function useApi() {
   const { user } = useAuth();
+  const { uid } = user;
 
   return {
     getAllData: function () {
@@ -40,32 +41,26 @@ export function useApi() {
     },
 
     postGameNew: function (timeControl) {
-      const { uid } = user;
       return apiPost("/game/new", { uid, timeControl });
     },
 
     postGameJoin: function (id) {
-      const { uid } = user;
       return apiPost(`/game/${id}/join`, { uid });
     },
 
     postGameLeave: function (id) {
-      const { uid } = user;
       return apiPost(`/game/${id}/leave`, { uid });
     },
 
     postGameReady: function (id) {
-      const { uid } = user;
       return apiPost(`/game/${id}/ready`, { uid });
     },
 
     postGameStart: function (id) {
-      const { uid } = user;
       return apiPost(`/game/${id}/start`, { uid });
     },
 
     getUser: function () {
-      const { uid } = user;
       return apiGet(`/user/${uid}`);
     },
 
