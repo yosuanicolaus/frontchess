@@ -4,7 +4,7 @@ import Loading from "../../components/Loading";
 import { useApi } from "../../helper/api";
 
 function AppRoom() {
-  const { postGameJoin, getGameRandomOpen } = useApi();
+  const { getGame, getGameRandomOpen } = useApi();
   const [loading, setLoading] = useState(false);
   const [invalid, setInvalid] = useState(false);
   const [noGame, setNoGame] = useState(false);
@@ -17,23 +17,23 @@ function AppRoom() {
     setNoGame(false);
   };
 
-  const handleSubmitJoin = (e) => {
+  const handleSubmitJoin = async (e) => {
+    // TODO: handle if user enters the game's link instead of id
     if (loading) return;
     e.preventDefault();
+    setLoading(`Looking for a game with id of ${joinID}`);
+    const data = await getGame(joinID);
+    if (typeof data === "string") {
+      setLoading(false);
+      setNoGame(false);
+      setInvalid(data);
+      return;
+    }
     joinGame(joinID);
   };
 
   const joinGame = async (id) => {
     setLoading(`Joining game ${id}...`);
-    const data = await postGameJoin(id);
-    if (typeof data === "string") {
-      // handle error
-      setLoading(false);
-      setInvalid(data);
-      console.log(data);
-      return;
-    }
-    console.log(data);
     navigate(`/game/${id}`);
   };
 

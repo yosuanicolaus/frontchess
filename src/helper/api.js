@@ -41,7 +41,7 @@ export function useApi() {
     },
 
     postGameNew: function (timeControl) {
-      return apiPost("/game/new", { uid, timeControl });
+      return apiPost("/game/new", { timeControl });
     },
 
     postGameJoin: function (id) {

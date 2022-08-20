@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import LoadingPage from "../components/LoadingPage";
 import { firstSignIn } from "./api";
+import { socket } from "./socket";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
@@ -35,6 +36,9 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState({});
   const [loading, setLoading] = useState(true);
 
+  // TODO: convert anonymous to permanent email and password account
+  // https://firebase.google.com/docs/auth/web/anonymous-auth?authuser=0&hl=en
+
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {
       let authUser;
@@ -51,14 +55,18 @@ export function AuthProvider({ children }) {
           authUser = anonymousUser;
         } catch (error) {
           console.log(error);
+          window.location.reload();
         }
       }
 
       authUser.name = authUser.displayName;
       const { name, uid } = authUser;
       if (name && uid) {
+        // TODO: sometimes this is called twice, thus creating double accounts.
+        // Happens when user first sign in. Fix it.
         setUser({ name, uid });
         setLoading(false);
+        socket.emit("setup", { name, uid });
       }
     });
   }, []);
