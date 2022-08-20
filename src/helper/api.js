@@ -1,62 +1,62 @@
 import axios from "axios";
-import { auth } from "./auth";
+import { useAuth } from "./auth";
 
-// axios = axios.create({ baseURL: "http://localhost:3001/" });
 axios.defaults.baseURL = "http://localhost:3001/";
 
-export function getAllGames() {
-  return apiGet("/");
-}
+export function useApi() {
+  const { user } = useAuth();
 
-export function getGameRandomOpen() {
-  return apiGet("/game/random/open");
-}
+  const apiGet = async (path) => {
+    try {
+      const response = await axios.get(path);
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      return error.response.data;
+    }
+  };
 
-export function postGameNew(timeControl) {
-  const user = auth.currentUser;
-  const username = user.displayName || user.uid;
-  return apiPost("/game/new", { username, timeControl });
-}
+  const apiPost = async (path, postData) => {
+    try {
+      const response = await axios.post(path, postData);
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      return error.response.data;
+    }
+  };
 
-export function postGameJoin(gameID, username) {
-  return apiPost(`/game/${gameID}/join`, { username });
-}
+  return {
+    getAllData: function () {
+      return apiGet("/");
+    },
 
-export function deleteGame(gameID) {
-  // TODO:
-  // backend: create api route /delete/game/:id
-  // then call that route here
-  console.log("deleted game with id", gameID);
-}
+    getGame: function (id) {
+      return apiGet(`/game/${id}`);
+    },
 
-export function getGame(gameID) {
-  return apiGet(`/game/${gameID}`);
-}
+    getGameRandomOpen: function () {
+      return apiGet("/game/random/open");
+    },
 
-export function postUserNew(uid) {
-  return apiPost("/user/new", { uid });
-}
+    postGameNew: function (timeControl) {
+      const { uid } = user;
+      return apiPost("/game/new", { uid, timeControl });
+    },
 
-export function getUser(uid) {
-  return apiGet(`/user/${uid}`);
-}
+    postGameJoin: function (id) {
+      const { uid } = user;
+      return apiPost(`/game/${id}/join`, { uid });
+    },
 
-async function apiGet(path) {
-  try {
-    const response = await axios.get(path);
-    const data = await response.data;
-    return data;
-  } catch (error) {
-    return error.response.data;
-  }
-}
+    postUserNew: function () {
+      const { uid } = user;
+      return apiPost("/user/new", { uid });
+    },
 
-async function apiPost(path, postData) {
-  try {
-    const response = await axios.post(path, postData);
-    const data = await response.data;
-    return data;
-  } catch (error) {
-    return error.response.data;
-  }
+    getUser: function () {
+      const { uid } = user;
+      return apiGet(`/user/${uid}`);
+    },
+  };
 }
