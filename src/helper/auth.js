@@ -1,13 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  signInAnonymously,
-  onAuthStateChanged,
-  updateProfile,
-} from "firebase/auth";
+import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import LoadingPage from "../components/LoadingPage";
-import { firstSignIn } from "./api";
+import { firstLogIn, firstSignIn } from "./api";
 import { socket } from "./socket";
 
 const firebaseConfig = {
@@ -23,58 +18,53 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const AuthContext = createContext();
 
-/**
- * returns { user } that have "name" and "uid"
- * as its property, which you can then use to
- * call /game & /user API or emit socket events
- */
 export function useAuth() {
   return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState({});
+  const [uid, setUid] = useState("");
+  const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(true);
 
   // TODO: convert anonymous to permanent email and password account
   // https://firebase.google.com/docs/auth/web/anonymous-auth?authuser=0&hl=en
 
   useEffect(() => {
-    onAuthStateChanged(auth, async (user) => {
-      let authUser;
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log("user is signed in");
-        authUser = user;
+        const userDB = await firstLogIn(user.uid);
+        setup(userDB);
       } else {
         try {
           console.log("new user detected, signing in anonymously");
-          const userCredential = await signInAnonymously(auth);
-          const anonymousUser = userCredential.user;
-          const userDB = await firstSignIn(anonymousUser.uid);
-          await updateProfile(anonymousUser, { displayName: userDB.name });
-          authUser = anonymousUser;
+          const credential = await signInAnonymously(auth);
+          const userDB = await firstSignIn(credential.user.uid);
+          setup(userDB);
         } catch (error) {
           console.log(error);
           window.location.reload();
         }
       }
-
-      authUser.name = authUser.displayName;
-      const { name, uid } = authUser;
-      if (name && uid) {
-        // TODO: sometimes this is called twice, thus creating double accounts.
-        // Happens when user first sign in. Fix it.
-        setUser({ name, uid });
-        setLoading(false);
-        socket.emit("setup", { name, uid });
-      }
     });
+
+    return unsubscribe;
   }, []);
+
+  const setup = (userDB) => {
+    const { name, uid } = userDB;
+    setUid(uid);
+    setUsername(name);
+    socket.emit("setup", { name, uid });
+    setLoading(false);
+  };
 
   return (
     <AuthContext.Provider
       value={{
-        user,
+        username,
+        uid,
       }}
     >
       {loading ? <LoadingPage text={"Signing in..."} /> : <>{children}</>}

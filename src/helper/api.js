@@ -24,8 +24,7 @@ const apiPost = async (path, postData) => {
 };
 
 export function useApi() {
-  const { user } = useAuth();
-  const { uid } = user;
+  const { username, uid } = useAuth();
 
   return {
     getAllData: function () {
@@ -73,8 +72,6 @@ export function useApi() {
     },
 
     postChatNewMessage: function (id, text) {
-      const username = user.name;
-      const uid = user.uid;
       return apiPost(`/chat/${id}/new-message`, { text, username, uid });
     },
   };
@@ -82,4 +79,8 @@ export function useApi() {
 
 export function firstSignIn(uid) {
   return apiPost("/user/new", { uid });
+}
+
+export function firstLogIn(uid) {
+  return apiGet(`/user/${uid}`);
 }
