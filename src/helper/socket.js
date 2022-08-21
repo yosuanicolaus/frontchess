@@ -1,5 +1,21 @@
+import { useEffect } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3003/");
+export const socket = io("http://localhost:3003/");
 
-export { socket };
+socket.on("log", (message) => {
+  console.log(message);
+});
+
+export function useSocket(id) {
+  useEffect(() => {
+    socket.emit("join", { id });
+
+    return () => {
+      socket.emit("leave", { id });
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  return socket;
+}
