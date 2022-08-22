@@ -36,7 +36,7 @@ function Game() {
           <section className="left-board text-bg-dark col d-md-block d-none">
             Game Chat
           </section>
-          <GameBoard />
+          <GameBoard gameDB={gameDB} />
           <section className="right-board text-bg-dark col d-md-block d-none">
             Game Info
           </section>
