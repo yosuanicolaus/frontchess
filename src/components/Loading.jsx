@@ -1,7 +1,18 @@
+import React, { useEffect } from "react";
+
 function Loading({ text, setLoading }) {
   const cancel = () => {
     setLoading(false);
   };
+
+  useEffect(() => {
+    document.body.style.cursor = "wait";
+    return () => {
+      document.body.style.cursor = "default";
+    };
+  }, []);
+
+  if (!text) return <span className="spinner-border spinner-border-sm"></span>;
 
   return (
     <div className="d-flex">

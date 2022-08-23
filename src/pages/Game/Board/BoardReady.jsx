@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import Loading from "../../../components/Loading";
 import { useAuth } from "../../../helper/auth";
 import { useGameDB } from "../GameHooks";
 
@@ -36,14 +38,21 @@ export default function BoardReady() {
 
 function ControlOwner() {
   const { startGame } = useGameDB();
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = () => {
+    setLoading(true);
+    startGame();
+  };
 
   return (
     <div className="row text-bg-primary">
       <button
         className="col btn btn-outline-success mx-3 mt-3"
-        onClick={startGame}
+        onClick={handleClick}
+        disabled={loading}
       >
-        Start
+        Start {loading && <Loading />}
       </button>
 
       <div>Challenger is ready. You can start the game</div>
@@ -53,11 +62,21 @@ function ControlOwner() {
 
 function ControlChallenger() {
   const { toggleReady } = useGameDB();
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = () => {
+    setLoading(true);
+    toggleReady();
+  };
 
   return (
     <div className="row text-bg-primary">
-      <button className="col btn btn-success mx-3 mt-3" onClick={toggleReady}>
-        Ready
+      <button
+        className="col btn btn-success mx-3 mt-3"
+        onClick={handleClick}
+        disabled={loading}
+      >
+        Ready {loading && <Loading />}
       </button>
       <div>You are ready. Waiting for owner to start the game</div>
     </div>

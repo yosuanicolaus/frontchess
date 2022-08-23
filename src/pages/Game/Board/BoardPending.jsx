@@ -1,3 +1,5 @@
+import React, { useState } from "react";
+import Loading from "../../../components/Loading";
 import { useAuth } from "../../../helper/auth";
 import { useGameDB } from "../GameHooks";
 
@@ -48,14 +50,21 @@ function ControlOwner() {
 
 function ControlChallenger() {
   const { toggleReady } = useGameDB();
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = () => {
+    setLoading(true);
+    toggleReady();
+  };
 
   return (
     <div className="row text-bg-primary">
       <button
         className="col btn btn-outline-light mx-3 mt-3"
-        onClick={toggleReady}
+        onClick={handleClick}
+        disabled={loading}
       >
-        Ready
+        Ready {loading && <Loading />}
       </button>
       <div>click ready so that owner can start the game</div>
     </div>
