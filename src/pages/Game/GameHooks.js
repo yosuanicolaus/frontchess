@@ -25,10 +25,16 @@ export function GameProvider({ id, children }) {
     };
   }, [id, socket]);
 
+  const value = {
+    game,
+
+    toggleReady: function () {
+      socket.emit("toggle", { id });
+    },
+  };
+
   if (!game)
     return <LoadingPage text={"gameprovider: fetching game from DB..."} />;
 
-  return (
-    <GameContext.Provider value={{ game }}>{children}</GameContext.Provider>
-  );
+  return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

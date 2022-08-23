@@ -43,9 +43,13 @@ function ControlOwner() {
 }
 
 function ControlChallenger() {
+  const { toggleReady } = useGameDB();
+
   return (
     <>
-      <button className="btn btn-outline-light mx-3 mt-3">Ready</button>
+      <button className="btn btn-outline-light mx-3 mt-3" onClick={toggleReady}>
+        Ready
+      </button>
       <div className="text-light">
         click ready so that owner can start the game
       </div>
