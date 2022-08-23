@@ -5,6 +5,7 @@ import BoardEmpty from "./Board/BoardEmpty";
 import BoardPending from "./Board/BoardPending";
 import BoardReady from "./Board/BoardReady";
 import BoardWaiting from "./Board/BoardWaiting";
+import Board from "./Board/Board";
 
 function GameBoard() {
   const ref = useRef();
@@ -23,6 +24,8 @@ function GameBoard() {
         return <BoardPending />;
       case "ready":
         return <BoardReady />;
+      case "playing":
+        return <Board />;
       default:
         <div>can't found board for this state!</div>;
     }

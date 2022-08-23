@@ -31,10 +31,13 @@ export function GameProvider({ id, children }) {
     toggleReady: function () {
       socket.emit("toggle", { id });
     },
+
+    startGame: function () {
+      socket.emit("start", { id });
+    },
   };
 
-  if (!game)
-    return <LoadingPage text={"gameprovider: fetching game from DB..."} />;
+  if (!game) return <LoadingPage text={"Fetching game from DB..."} />;
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

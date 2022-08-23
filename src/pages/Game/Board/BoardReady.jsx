@@ -35,9 +35,16 @@ export default function BoardReady() {
 }
 
 function ControlOwner() {
+  const { startGame } = useGameDB();
+
   return (
     <div className="row text-bg-primary">
-      <button className="col btn btn-outline-success mx-3 mt-3">Start</button>
+      <button
+        className="col btn btn-outline-success mx-3 mt-3"
+        onClick={startGame}
+      >
+        Start
+      </button>
 
       <div>Challenger is ready. You can start the game</div>
     </div>
