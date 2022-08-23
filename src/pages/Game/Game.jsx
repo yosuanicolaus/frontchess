@@ -10,11 +10,11 @@ function Game() {
       <main className="flex-grow-1 d-flex">
         <div className="container-fluid flex-grow-1 d-flex flex-column">
           <div className="row flex-grow-1">
-            <section className="left-board text-bg-dark col d-md-block d-none">
+            <section className="text-bg-dark col d-md-block d-none">
               Game Chat
             </section>
             <GameBoard />
-            <section className="right-board text-bg-dark col d-md-block d-none">
+            <section className="text-bg-dark col d-md-block d-none">
               Game Info
             </section>
           </div>

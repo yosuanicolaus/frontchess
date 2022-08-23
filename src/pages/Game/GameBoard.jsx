@@ -32,7 +32,7 @@ function GameBoard() {
     <section ref={ref} className="board col-lg-6 col-md-7 col d-flex bg-light">
       <main
         style={{ height: size, width: size }}
-        className="border border-5 border-primary shadow-lg m-auto d-flex text-bg-dark bg-gradient"
+        className="shadow-lg m-auto d-flex text-bg-dark bg-gradient"
       >
         {getBoard(game.state)}
       </main>

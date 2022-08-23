@@ -14,10 +14,9 @@ export default function BoardWaiting() {
   };
 
   return (
-    <div className="m-auto">
-      <em className="lead">Waiting for another player to join...</em>
-
-      <form onSubmit={(e) => e.preventDefault()}>
+    <div className="border border-5 border-secondary container-fluid d-flex">
+      <form onSubmit={(e) => e.preventDefault()} className="m-auto">
+        <em className="lead">Waiting for another player to join...</em>
         <label htmlFor="gameID" className="form-label">
           Game ID:
         </label>
