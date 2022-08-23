@@ -22,7 +22,8 @@ export function useChat(id) {
       socket.off("update-chat");
       socket.off("new-message");
     };
-  }, [id, socket, getChat]);
+    // eslint-disable-next-line
+  }, []);
 
   return {
     chat,
