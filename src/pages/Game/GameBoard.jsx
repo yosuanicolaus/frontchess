@@ -1,7 +1,8 @@
 import { useRef } from "react";
 import { useDimensions } from "../../helper/dimensions";
 import BoardEmpty from "./Board/BoardEmpty";
-import BoardPendingReady from "./Board/BoardPendingReady";
+import BoardPending from "./Board/BoardPending";
+import BoardReady from "./Board/BoardReady";
 import BoardWaiting from "./Board/BoardWaiting";
 
 function GameBoard({ gameDB }) {
@@ -17,8 +18,9 @@ function GameBoard({ gameDB }) {
       case "waiting":
         return <BoardWaiting gameDB={gameDB} />;
       case "pending":
+        return <BoardPending gameDB={gameDB} />;
       case "ready":
-        return <BoardPendingReady gameDB={gameDB} />;
+        return <BoardReady gameDB={gameDB} />;
       default:
         <div>can't found board for this state!</div>;
     }
