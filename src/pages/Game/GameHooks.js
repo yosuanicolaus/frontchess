@@ -14,6 +14,7 @@ export function GameProvider({ id, children }) {
 
   useEffect(() => {
     if (!id || !socket) return;
+    socket.emit("join-game", { id });
 
     socket.on("update-game", (game) => {
       console.log("updating game state");
@@ -21,6 +22,7 @@ export function GameProvider({ id, children }) {
     });
 
     return () => {
+      socket.emit("leave-game", { id });
       socket.off("update-game");
     };
   }, [id, socket]);
