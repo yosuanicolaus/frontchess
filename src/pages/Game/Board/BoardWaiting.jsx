@@ -1,9 +1,12 @@
-export default function BoardWaiting({ gameDB }) {
+import { useGameDB } from "../GameHooks";
+
+export default function BoardWaiting() {
+  const { game } = useGameDB();
   // TODO: when the app is deployed, replace with actual URL
-  const url = `http://localhost:3000/game/${gameDB._id}`;
+  const url = `http://localhost:3000/game/${game._id}`;
 
   const copyGameID = () => {
-    navigator.clipboard.writeText(gameDB._id);
+    navigator.clipboard.writeText(game._id);
   };
 
   const copyGameLink = () => {
@@ -24,7 +27,7 @@ export default function BoardWaiting({ gameDB }) {
             className="form-control form-control-sm"
             readOnly
             id="gameID"
-            value={gameDB._id}
+            value={game._id}
           />
           <button className="btn btn-secondary btn-sm" onClick={copyGameID}>
             Copy

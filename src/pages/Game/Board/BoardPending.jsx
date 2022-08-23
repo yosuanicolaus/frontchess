@@ -1,10 +1,12 @@
 import { useAuth } from "../../../helper/auth";
+import { useGameDB } from "../GameHooks";
 
-export default function BoardPending({ gameDB }) {
+export default function BoardPending() {
   const { uid } = useAuth();
+  const { game } = useGameDB();
 
-  const owner = uid === gameDB.user0.uid;
-  const challenger = uid === gameDB.user1.uid;
+  const owner = uid === game.user0.uid;
+  const challenger = uid === game.user1.uid;
 
   return (
     <div className="container-fluid d-flex flex-column text-center">
@@ -12,13 +14,13 @@ export default function BoardPending({ gameDB }) {
 
       <div className="row my-auto">
         <div className="col-6">
-          <div className="fw-bold">{gameDB.user0.name}</div>
-          <div className="fst-italic">- {gameDB.user0.elo} -</div>
+          <div className="fw-bold">{game.user0.name}</div>
+          <div className="fst-italic">- {game.user0.elo} -</div>
         </div>
 
         <div className="col-6">
-          <div className="fw-bold">{gameDB.user1.name}</div>
-          <div className="fst-italic">- {gameDB.user1.elo} -</div>
+          <div className="fw-bold">{game.user1.name}</div>
+          <div className="fst-italic">- {game.user1.elo} -</div>
         </div>
       </div>
 
