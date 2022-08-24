@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRef } from "react";
 import Loading from "../../components/Loading";
+import { useAuth } from "../../helper/auth";
 import { useChat } from "../../helper/chat";
 import { useGameDB } from "./GameHooks";
 
@@ -74,11 +75,16 @@ function GameChat() {
 }
 
 function Message({ message }) {
+  const { uid } = useAuth();
+  const isMe = message.uid === uid;
+  const date = new Date(message.createdAt);
+  const time = date.toLocaleTimeString();
+
   return (
-    <div className="my-1 text-bg-light small rounded">
-      <strong>{message.username}</strong>
+    <div className="my-1 text-bg-light small rounded d-flex flex-column">
+      {isMe ? <strong>You</strong> : <strong>{message.username}</strong>}
       <div>{message.text}</div>
-      <em className="opacity-50">{message.createdAt}</em>
+      <em className="opacity-50 ms-auto">{time}</em>
     </div>
   );
 }
