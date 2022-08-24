@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 import { useApi } from "../../helper/api";
+import { isValid, convertLink } from "./utils";
 
 function AppRoom() {
   const { getGame, getGameRandomOpen } = useApi();
@@ -19,17 +20,20 @@ function AppRoom() {
 
   const handleSubmitJoin = async (e) => {
     // TODO: handle if user enters the game's link instead of id
-    if (loading) return;
     e.preventDefault();
-    setLoading(`Looking for a game with id of ${joinID}`);
-    const data = await getGame(joinID);
+    let id = joinID;
+    if (loading) return;
+    if (!isValid(id)) return setInvalid("invalid game ID");
+    id = convertLink(id);
+    setLoading(`Looking for a game with id of ${id}`);
+    const data = await getGame(id);
     if (typeof data === "string") {
       setLoading(false);
       setNoGame(false);
       setInvalid(data);
       return;
     }
-    joinGame(joinID);
+    joinGame(id);
   };
 
   const joinGame = async (id) => {
