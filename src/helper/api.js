@@ -1,7 +1,12 @@
 import axios from "axios";
 import { useAuth } from "./auth";
 
-axios.defaults.baseURL = "http://localhost:3001/";
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://desolate-caverns-62809.herokuapp.com/"
+    : "http://localhost:3001/";
+
+axios.defaults.baseURL = API_URL;
 
 const apiGet = async (path) => {
   try {
