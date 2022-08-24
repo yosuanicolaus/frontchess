@@ -80,7 +80,7 @@ function SizeControl({ size, setSize, dim }) {
   return (
     <div className="row text-bg-secondary pt-1">
       <label htmlFor="sizeControl" className="text-center small">
-        Set Board Size, min: {min}, max: {max}, size: {size}
+        Set Board Size
       </label>
       <input
         id="sizeControl"
