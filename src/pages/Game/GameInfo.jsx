@@ -2,6 +2,30 @@ import { useAuth } from "../../helper/auth";
 import { useGameDB } from "./GameHooks";
 
 function GameInfo() {
+  const { game } = useGameDB();
+
+  const getInfo = (state) => {
+    switch (state) {
+      case "empty":
+      case "waiting":
+      case "pending":
+      case "ready":
+        return <PreInfo />;
+      case "playing":
+        return <PlayingInfo />;
+      default:
+        return <div>can't found info for this state!</div>;
+    }
+  };
+
+  return (
+    <section className="bg-secondary text-center col d-md-flex flex-column d-none border-start border-5 border-primary">
+      {getInfo(game.state)}
+    </section>
+  );
+}
+
+function PreInfo() {
   const { uid } = useAuth();
   const { game } = useGameDB();
 
@@ -9,7 +33,7 @@ function GameInfo() {
   const challenger = game.user1?.uid === uid;
 
   return (
-    <section className="bg-secondary text-center col d-md-flex flex-column d-none border-start border-5 border-primary">
+    <>
       <div className="row flex-grow-1 d-flex mb-1 text-bg-primary border border-secondary">
         {owner && <UserInfo user={game.user1} />}
         {challenger && <UserInfo user={game.user0} />}
@@ -19,7 +43,7 @@ function GameInfo() {
         {owner && <UserInfo user={game.user0} />}
         {challenger && <UserInfo user={game.user1} />}
       </div>
-    </section>
+    </>
   );
 }
 
@@ -37,6 +61,45 @@ function UserInfo({ user }) {
       ) : (
         <em>waiting for another player to join...</em>
       )}
+    </div>
+  );
+}
+
+function PlayingInfo() {
+  const { game } = useGameDB();
+
+  return (
+    <>
+      <div className="row text-bg-dark">
+        <PlayerInfo player={game.pblack} />
+      </div>
+      <div className="row flex-grow-1 d-flex text-bg-primary bg-gradient">
+        <PlayHistory history={game.history} />
+      </div>
+      <div className="row text-bg-light">
+        <PlayerInfo player={game.pwhite} />
+      </div>
+    </>
+  );
+}
+
+function PlayHistory() {
+  const { game } = useGameDB();
+
+  return (
+    <div className="m-auto">
+      <div>History: {game.history.toString()}</div>
+      <div>PGN: {game.pgn}</div>
+    </div>
+  );
+}
+
+function PlayerInfo({ player }) {
+  return (
+    <div>
+      <strong>{player.name}</strong>
+      <div className="fst-italic">Active: {player.active.toString()}</div>
+      <div className="fst-italic">Online: {player.online.toString()}</div>
     </div>
   );
 }

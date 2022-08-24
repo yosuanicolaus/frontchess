@@ -26,7 +26,7 @@ function GameBoard() {
       case "playing":
         return <Board />;
       default:
-        <div>can't found board for this state!</div>;
+        return <div>can't found board for this state!</div>;
     }
   };
 
