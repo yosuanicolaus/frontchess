@@ -33,7 +33,7 @@ function GameBoard() {
   return (
     <section
       ref={ref}
-      className="board col-lg-6 col-md-7 col d-flex flex-column bg-light"
+      className="board col-md-7 col d-flex flex-column bg-light"
     >
       <main
         style={{ height: size, width: size }}

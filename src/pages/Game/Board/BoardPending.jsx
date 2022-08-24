@@ -11,7 +11,7 @@ export default function BoardPending() {
   const challenger = uid === game.user1.uid;
 
   return (
-    <div className="container-fluid d-flex flex-column text-center border border-5 border-info">
+    <div className="container-fluid d-flex flex-column text-center border border-5 border-secondary">
       <h3 className="row py-3 bg-primary">
         <div className="col">Board Pending</div>
       </h3>

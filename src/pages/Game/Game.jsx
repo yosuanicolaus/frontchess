@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { GameProvider } from "./GameHooks";
 import GameBoard from "./GameBoard";
 import GameChat from "./GameChat";
+import GameInfo from "./GameInfo";
 
 function Game() {
   const { id } = useParams();
@@ -13,9 +14,7 @@ function Game() {
           <div className="row flex-grow-1">
             <GameChat />
             <GameBoard />
-            <section className="text-bg-dark col d-md-block d-none">
-              Game Info
-            </section>
+            <GameInfo />
           </div>
 
           <div className="row text-bg-secondary text-center d-md-none d-flex">
