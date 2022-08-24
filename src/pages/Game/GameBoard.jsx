@@ -24,23 +24,24 @@ function GameBoard() {
       case "ready":
         return <BoardReady />;
       case "playing":
-        return <Board />;
+        return <Board size={size} />;
       default:
         return <div>can't found board for this state!</div>;
     }
   };
 
   return (
-    <section
-      ref={ref}
-      className="board col-md-7 col d-flex flex-column bg-light"
-    >
-      <main
-        style={{ height: size, width: size }}
-        className="shadow-lg m-auto d-flex text-bg-dark bg-gradient"
-      >
-        {getBoard(game.state)}
-      </main>
+    <section className="board col-md-7 col d-flex flex-column bg-light">
+      <div className="d-flex flex-grow-1" ref={ref}>
+        <div className="border border-4 border-primary m-auto shadow-lg">
+          <main
+            style={{ height: size, width: size }}
+            className="shadow-lg m-auto d-flex text-bg-dark bg-gradient"
+          >
+            {getBoard(game.state)}
+          </main>
+        </div>
+      </div>
       {/* TODO: size control for mobile */}
       <SizeControl size={size} setSize={setSize} dim={dim} />
     </section>
@@ -70,16 +71,16 @@ function SizeControl({ size, setSize, dim }) {
     const recommendedSize = (min + newMax) / 2;
 
     if (newMax < min) return;
-    setMax(newMax);
+    setMax(Math.floor(newMax));
     if (size > newMax) return setSize(newMax);
     setFloorSize(lerp(size, recommendedSize, 0.1));
     // eslint-disable-next-line
   }, [dim]);
 
   return (
-    <div className="row text-bg-secondary p-2">
+    <div className="row text-bg-secondary pt-1">
       <label htmlFor="sizeControl" className="text-center small">
-        Set Board Size
+        Set Board Size, min: {min}, max: {max}, size: {size}
       </label>
       <input
         id="sizeControl"
