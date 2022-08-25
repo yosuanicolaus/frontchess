@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { useState, createContext, useContext } from "react";
 import { useGameDB } from "../GameHooks";
 import Panels from "./Panels";
 import Pieces from "./Pieces";
@@ -9,6 +9,23 @@ export const useBoard = () => useContext(BoardContext);
 function Board({ size }) {
   const { game } = useGameDB();
   const positions = createPositions(size);
+  const [activePiece, setActivePiece] = useState({});
+  const [activeMoves, setActiveMoves] = useState([]);
+
+  const getMovesFromRankFile = (rank, file) => {
+    if (activePiece.rank === rank && activePiece.file === file) {
+      setActivePiece({});
+      setActiveMoves([]);
+      return;
+    } else {
+      setActivePiece({ rank, file });
+    }
+
+    const moves = game.moves.filter(
+      (move) => move.from.rank === rank && move.from.file === file
+    );
+    setActiveMoves(moves);
+  };
 
   return (
     <main
@@ -19,7 +36,14 @@ function Board({ size }) {
         height: size,
       }}
     >
-      <BoardContext.Provider value={{ positions, size }}>
+      <BoardContext.Provider
+        value={{
+          positions,
+          size,
+          getMovesFromRankFile,
+          activeMoves,
+        }}
+      >
         <Panels />
         <Pieces />
       </BoardContext.Provider>

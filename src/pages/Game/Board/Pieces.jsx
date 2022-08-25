@@ -33,9 +33,11 @@ export default function Pieces() {
 
 function Piece({ code, x, y, size, rank, file }) {
   const svgCode = getSvgCode(code);
+  const { getMovesFromRankFile } = useBoard();
 
   const handleClick = () => {
     console.log("get moves for rank file:", rank, file);
+    getMovesFromRankFile(rank, file);
   };
 
   return (
