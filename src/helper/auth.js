@@ -24,7 +24,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
   const [uid, setUid] = useState("");
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(true);
 
   // TODO: convert anonymous to permanent email and password account
@@ -32,21 +32,21 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      let userDB;
       if (user) {
         console.log("user is signed in");
-        const userDB = await firstLogIn(user.uid);
-        setup(userDB);
+        userDB = await firstLogIn(user.uid);
       } else {
         try {
           console.log("new user detected, signing in anonymously");
           const credential = await signInAnonymously(auth);
-          const userDB = await firstSignIn(credential.user.uid);
-          setup(userDB);
+          userDB = await firstSignIn(credential.user.uid);
         } catch (error) {
           console.log(error);
           window.location.reload();
         }
       }
+      if (userDB.name && userDB.uid) setup(userDB);
     });
 
     return unsubscribe;
@@ -54,20 +54,22 @@ export function AuthProvider({ children }) {
 
   const setup = (userDB) => {
     const { name, uid } = userDB;
-    setUid(uid);
-    setUsername(name);
     socket.emit("setup", { name, uid });
+    setUid(uid);
+    setName(name);
     setLoading(false);
   };
+
+  if (loading) return <LoadingPage text={"Signing in..."} />;
 
   return (
     <AuthContext.Provider
       value={{
-        username,
+        name,
         uid,
       }}
     >
-      {loading ? <LoadingPage text={"Signing in..."} /> : <>{children}</>}
+      {children}
     </AuthContext.Provider>
   );
 }

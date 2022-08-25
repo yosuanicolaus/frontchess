@@ -68,16 +68,12 @@ function Navbar() {
 }
 
 function UserInfo({ checkActive, goTo }) {
-  const { username } = useAuth();
+  const { name } = useAuth();
 
   return (
     <li className="nav-item ms-auto">
-      <a
-        href={`/user/${username}`}
-        className={checkActive("user")}
-        onClick={goTo}
-      >
-        {username}
+      <a href={`/user/${name}`} className={checkActive("user")} onClick={goTo}>
+        {name}
       </a>
     </li>
   );
