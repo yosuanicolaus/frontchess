@@ -1,4 +1,8 @@
-export default function Panels({ positions, size }) {
+import { useBoard } from "./Board";
+
+export default function Panels() {
+  const { positions, size } = useBoard();
+  const panelSize = size / 8;
   const panels = [];
 
   for (let rank = 0; rank < 8; rank++) {
@@ -10,7 +14,7 @@ export default function Panels({ positions, size }) {
           y={y}
           rank={rank}
           file={file}
-          size={size}
+          size={panelSize}
           key={`panel-${rank}-${file}`}
         />
       );

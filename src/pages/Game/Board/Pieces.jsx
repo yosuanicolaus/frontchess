@@ -1,6 +1,12 @@
 import React from "react";
+import { useGameDB } from "../GameHooks";
+import { useBoard } from "./Board";
 
-export function Pieces({ board, positions, size }) {
+export default function Pieces() {
+  const { game } = useGameDB();
+  const { positions, size } = useBoard();
+  const pieceSize = size / 8;
+  const board = game.board;
   const pieces = [];
 
   for (let rank = 0; rank < 8; rank++) {
@@ -13,7 +19,7 @@ export function Pieces({ board, positions, size }) {
           code={code}
           x={x}
           y={y}
-          size={size}
+          size={pieceSize}
           rank={rank}
           file={file}
           key={`${code}-${rank}-${file}`}

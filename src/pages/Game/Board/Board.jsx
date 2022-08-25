@@ -1,4 +1,10 @@
+import { createContext, useContext } from "react";
 import { useGameDB } from "../GameHooks";
+import Panels from "./Panels";
+import Pieces from "./Pieces";
+
+const BoardContext = createContext();
+export const useBoard = () => useContext(BoardContext);
 
 function Board({ size }) {
   const { game } = useGameDB();
@@ -13,7 +19,10 @@ function Board({ size }) {
         height: size,
       }}
     >
-      <div className="small font-monospace">hello world</div>
+      <BoardContext.Provider value={{ positions, size }}>
+        <Panels />
+        <Pieces />
+      </BoardContext.Provider>
     </main>
   );
 }
