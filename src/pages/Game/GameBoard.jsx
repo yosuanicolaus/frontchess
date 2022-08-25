@@ -42,15 +42,15 @@ function GameBoard() {
           </main>
         </div>
       </div>
-      {/* TODO: size control for mobile */}
       <SizeControl size={size} setSize={setSize} dim={dim} />
     </section>
   );
 }
 
 function SizeControl({ size, setSize, dim }) {
-  const min = 350;
+  const min = 400;
   const [max, setMax] = useState(600);
+  const [disabled, setDisabled] = useState(false);
 
   const setFloorSize = (value) => {
     setSize(Math.floor(value));
@@ -68,7 +68,15 @@ function SizeControl({ size, setSize, dim }) {
     const smallerSide = Math.min(dim.width, dim.height);
     const distance = smallerSide - min;
     const newMax = (3 / 4) * distance + min;
-    const recommendedSize = (min + newMax) / 2;
+    let recommendedSize = (min + newMax) / 2;
+
+    if (distance <= 15) {
+      setDisabled(true);
+      setFloorSize(smallerSide - 15);
+      recommendedSize = min;
+    } else if (disabled) {
+      setDisabled(false);
+    }
 
     if (newMax < min) return;
     setMax(Math.floor(newMax));
@@ -79,7 +87,11 @@ function SizeControl({ size, setSize, dim }) {
 
   return (
     <div className="row text-bg-secondary pt-1">
-      <label htmlFor="sizeControl" className="text-center small">
+      <label
+        htmlFor="sizeControl"
+        className="text-center small"
+        hidden={disabled}
+      >
         Set Board Size
       </label>
       <input
@@ -90,6 +102,7 @@ function SizeControl({ size, setSize, dim }) {
         max={max}
         value={size}
         onChange={handleSlide}
+        disabled={disabled}
       />
     </div>
   );

@@ -32,8 +32,8 @@ function GameChat() {
   }, [chat]);
 
   return (
-    <section className="col container-fluid text-bg-primary d-md-flex flex-column d-none border-end border-5 border-primary">
-      <h5 className="row mb-1 p-2 text-bg-light">Chat</h5>
+    <section className="col container-fluid text-bg-primary d-md-flex flex-column d-none border-end border-5 border-primary ps-3">
+      <h5 className="row mb-1 px-3 py-2 text-bg-light">Chat</h5>
 
       {chat ? (
         <div

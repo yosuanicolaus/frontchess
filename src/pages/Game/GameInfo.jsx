@@ -19,7 +19,7 @@ function GameInfo() {
   };
 
   return (
-    <section className="bg-secondary text-center col d-md-flex flex-column d-none border-start border-5 border-primary">
+    <section className="bg-secondary text-center col d-md-flex flex-column d-none border-start border-5 border-primary pe-4">
       {getInfo(game.state)}
     </section>
   );

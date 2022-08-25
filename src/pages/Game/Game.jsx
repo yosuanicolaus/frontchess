@@ -10,7 +10,7 @@ function Game() {
   return (
     <GameProvider id={id}>
       <main className="flex-grow-1 d-flex">
-        <div className="container-fluid flex-grow-1 d-flex flex-column">
+        <div className="container-fluid p-0 overflow-hidden flex-grow-1 d-flex flex-column">
           <div className="row flex-grow-1">
             <GameChat />
             <GameBoard />

@@ -79,7 +79,7 @@ function ControlChallenger() {
       >
         Ready {loading && <Loading />}
       </button>
-      <div>You are ready. Waiting for owner to start the game</div>
+      <div>Waiting for owner to start the game</div>
     </div>
   );
 }
