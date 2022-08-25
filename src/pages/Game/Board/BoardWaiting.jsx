@@ -2,8 +2,7 @@ import { useGameDB } from "../GameHooks";
 
 export default function BoardWaiting() {
   const { game } = useGameDB();
-  // TODO: when the app is deployed, replace with actual URL
-  const url = `http://localhost:3000/game/${game._id}`;
+  const url = window.location.href;
 
   const copyGameID = () => {
     navigator.clipboard.writeText(game._id);

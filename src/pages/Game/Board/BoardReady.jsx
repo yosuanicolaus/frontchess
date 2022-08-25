@@ -12,11 +12,12 @@ export default function BoardReady() {
 
   return (
     <div className="container-fluid d-flex flex-column text-center border border-5 border-success">
-      <h3 className="row py-3 bg-primary">
-        <div className="col">Board Ready</div>
-      </h3>
+      <div className="row pt-2 pb-1 bg-primary">
+        <h3 className="m-0">Board Ready</h3>
+        <em>Game ID: {game._id}</em>
+      </div>
 
-      <div className="row my-auto">
+      <div className="row my-auto overflow-hidden">
         <div className="col-6">
           {owner ? <em>- Owner (you) -</em> : <em>- Owner -</em>}
           <div className="fw-bold">{game.user0.name}</div>

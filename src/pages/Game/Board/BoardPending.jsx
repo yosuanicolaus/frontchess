@@ -12,11 +12,12 @@ export default function BoardPending() {
 
   return (
     <div className="container-fluid d-flex flex-column text-center border border-5 border-secondary">
-      <h3 className="row py-3 bg-primary">
-        <div className="col">Board Pending</div>
-      </h3>
+      <div className="row pt-2 pb-1 bg-primary">
+        <h3 className="m-0">Board Pending</h3>
+        <em>Game ID: {game._id}</em>
+      </div>
 
-      <div className="row my-auto">
+      <div className="row my-auto overflow-hidden">
         <div className="col-6">
           {owner ? <em>- Owner (you) -</em> : <em>- Owner -</em>}
           <div className="fw-bold">{game.user0.name}</div>
@@ -43,7 +44,7 @@ function ControlOwner() {
         Start
       </button>
 
-      <div className="opacity-50">(waiting for challenger to be ready)</div>
+      <div className="opacity-75">Waiting for challenger to be ready</div>
     </div>
   );
 }
@@ -66,7 +67,7 @@ function ControlChallenger() {
       >
         Ready {loading && <Loading />}
       </button>
-      <div>click ready so that owner can start the game</div>
+      <div className="opacity-75">Waiting for you to ready</div>
     </div>
   );
 }
