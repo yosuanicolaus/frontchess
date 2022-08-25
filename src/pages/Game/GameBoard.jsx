@@ -70,6 +70,7 @@ function SizeControl({ size, setSize, dim }) {
     const newMax = (3 / 4) * distance + min;
     let recommendedSize = (min + newMax) / 2;
 
+    if (newMax < min) return;
     if (distance <= 15) {
       setDisabled(true);
       setFloorSize(smallerSide - 15);
@@ -78,7 +79,6 @@ function SizeControl({ size, setSize, dim }) {
       setDisabled(false);
     }
 
-    if (newMax < min) return;
     setMax(Math.floor(newMax));
     if (size > newMax) return setSize(newMax);
     setFloorSize(lerp(size, recommendedSize, 0.1));
