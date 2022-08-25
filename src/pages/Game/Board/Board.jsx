@@ -1,19 +1,9 @@
-import { useState, createContext, useContext } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import { useAuth } from "../../../helper/auth";
 import { useGameDB } from "../GameHooks";
-import Panels from "./Panels";
+import BackPanels from "./BackPanels";
+import FrontPanels from "./FrontPanels";
 import Pieces from "./Pieces";
-
-const defaultPanels = [
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-];
 
 const BoardContext = createContext();
 export const useBoard = () => useContext(BoardContext);
@@ -28,13 +18,10 @@ function Board({ size }) {
 
   const getMovesFromRankFile = (rank, file) => {
     if (activePiece.rank === rank && activePiece.file === file) {
-      setActivePiece({});
-      setActiveMoves([]);
-      return;
-    } else {
-      setActivePiece({ rank, file });
+      return removeFocus();
     }
 
+    setActivePiece({ rank, file });
     if (
       (game.turn === "w" && game.pwhite.uid === uid) ||
       (game.turn === "b" && game.pblack.uid === uid)
@@ -48,17 +35,18 @@ function Board({ size }) {
   };
 
   const configurePanels = (moves, activeRank, activeFile) => {
-    const copyPanels = defaultPanels.map((arr) => arr.slice());
-    copyPanels[activeRank][activeFile] = 3;
+    const copyPanels = getCopyBoardPanels(game.board);
 
     moves.forEach((move) => {
       const { rank, file } = move.to;
       if (move.capture) {
-        copyPanels[rank][file] = 2;
+        copyPanels[rank][file] = 3;
       } else {
-        copyPanels[rank][file] = 1;
+        copyPanels[rank][file] = 2;
       }
     });
+
+    if (activeRank >= 0) copyPanels[activeRank][activeFile] = 11;
     setPanels(copyPanels);
   };
 
@@ -74,8 +62,12 @@ function Board({ size }) {
   const removeFocus = () => {
     setActivePiece({});
     setActiveMoves([]);
-    setPanels(defaultPanels);
+    setPanels(getCopyBoardPanels(game.board));
   };
+
+  useEffect(() => {
+    setPanels(getCopyBoardPanels(game.board));
+  }, [game.board]);
 
   return (
     <main
@@ -98,12 +90,36 @@ function Board({ size }) {
           playRankFile,
         }}
       >
-        <Panels />
+        <BackPanels />
         <Pieces />
+        <FrontPanels />
       </BoardContext.Provider>
     </main>
   );
 }
+
+const defaultPanels = [
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+];
+
+const getCopyBoardPanels = (board) => {
+  const copyPanels = defaultPanels.map((arr) => arr.slice());
+
+  for (let rank = 0; rank < 8; rank++) {
+    for (let file = 0; file < 8; file++) {
+      if (board[rank][file] === ".") continue;
+      copyPanels[rank][file] = 1;
+    }
+  }
+  return copyPanels;
+};
 
 function createPositions(size) {
   const positions = [];

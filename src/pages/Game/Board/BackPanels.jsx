@@ -3,12 +3,13 @@ import { useBoard } from "./Board";
 export default function BackPanels() {
   const { positions, size, panels } = useBoard();
   const panelSize = size / 8;
+  const backPanels = [];
 
   for (let rank = 0; rank < 8; rank++) {
     for (let file = 0; file < 8; file++) {
-      if (panels[rank][file]) {
+      if (panels[rank][file] >= 2) {
         const { x, y } = positions[rank][file];
-        panels.push(
+        backPanels.push(
           <BackPanel
             x={x}
             y={y}
@@ -20,7 +21,7 @@ export default function BackPanels() {
       }
     }
   }
-  return panels.map((panel) => panel);
+  return backPanels.map((panel) => panel);
 }
 
 function BackPanel({ x, y, size, code }) {
@@ -45,9 +46,9 @@ function getSvgFromCode(code) {
   const defaultPiece = "/icons/clover-spiked.svg";
 
   switch (code) {
-    case 1:
-      return localStorage.getItem("icon-move") || defaultMove;
     case 2:
+      return localStorage.getItem("icon-move") || defaultMove;
+    case 3:
       return localStorage.getItem("icon-capture") || defaultCapture;
     default:
       return localStorage.getItem("icon-piece") || defaultPiece;
