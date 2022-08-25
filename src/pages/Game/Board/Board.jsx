@@ -4,6 +4,17 @@ import { useGameDB } from "../GameHooks";
 import Panels from "./Panels";
 import Pieces from "./Pieces";
 
+const defaultPanels = [
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+];
+
 const BoardContext = createContext();
 export const useBoard = () => useContext(BoardContext);
 
@@ -11,6 +22,7 @@ function Board({ size }) {
   const { uid } = useAuth();
   const { game, playMove } = useGameDB();
   const positions = createPositions(size);
+  const [panels, setPanels] = useState(defaultPanels);
   const [activePiece, setActivePiece] = useState({});
   const [activeMoves, setActiveMoves] = useState([]);
 
@@ -31,7 +43,23 @@ function Board({ size }) {
         (move) => move.from.rank === rank && move.from.file === file
       );
       setActiveMoves(moves);
+      configurePanels(moves, rank, file);
     }
+  };
+
+  const configurePanels = (moves, activeRank, activeFile) => {
+    const copyPanels = defaultPanels.map((arr) => arr.slice());
+    copyPanels[activeRank][activeFile] = 3;
+
+    moves.forEach((move) => {
+      const { rank, file } = move.to;
+      if (move.capture) {
+        copyPanels[rank][file] = 2;
+      } else {
+        copyPanels[rank][file] = 1;
+      }
+    });
+    setPanels(copyPanels);
   };
 
   const playRankFile = (toRank, toFile) => {
@@ -46,6 +74,7 @@ function Board({ size }) {
   const removeFocus = () => {
     setActivePiece({});
     setActiveMoves([]);
+    setPanels(defaultPanels);
   };
 
   return (
@@ -61,6 +90,7 @@ function Board({ size }) {
         value={{
           positions,
           size,
+          panels,
           activeMoves,
           activePiece,
           getMovesFromRankFile,
