@@ -20,25 +20,16 @@ export default function Pieces() {
           x={x}
           y={y}
           size={pieceSize}
-          rank={rank}
-          file={file}
           key={`${code}-${rank}-${file}`}
         />
       );
     }
   }
-
   return pieces.map((piece) => piece);
 }
 
-function Piece({ code, x, y, size, rank, file }) {
-  const svgCode = getSvgCode(code);
-  const { getMovesFromRankFile } = useBoard();
-
-  const handleClick = () => {
-    console.log("get moves for rank file:", rank, file);
-    getMovesFromRankFile(rank, file);
-  };
+function Piece({ code, x, y, size }) {
+  const svgCode = getPieceSvgCode(code);
 
   return (
     <img
@@ -51,12 +42,11 @@ function Piece({ code, x, y, size, rank, file }) {
         width: size,
         height: size,
       }}
-      onClick={handleClick}
     />
   );
 }
 
-function getSvgCode(code) {
+function getPieceSvgCode(code) {
   let svgCode;
   if (code.toUpperCase() === code) {
     svgCode = "w" + code;
