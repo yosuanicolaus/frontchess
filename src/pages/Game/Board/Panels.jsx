@@ -81,8 +81,10 @@ function Panel({ x, y, size }) {
 }
 
 function ActivePanel({ x, y, size, rank, file, code }) {
+  const { playRankFile } = useBoard();
+
   const handleClick = () => {
-    console.log("move to", rank, file);
+    playRankFile(rank, file);
   };
 
   return (

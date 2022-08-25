@@ -37,6 +37,10 @@ export function GameProvider({ id, children }) {
     startGame: function () {
       socket.emit("start", { id });
     },
+
+    playMove: function (move) {
+      socket.emit("play", { id, move });
+    },
   };
 
   if (!game) return <LoadingPage text={"Fetching game from DB..."} />;

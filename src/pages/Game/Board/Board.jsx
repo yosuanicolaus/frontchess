@@ -1,4 +1,5 @@
 import { useState, createContext, useContext } from "react";
+import { useAuth } from "../../../helper/auth";
 import { useGameDB } from "../GameHooks";
 import Panels from "./Panels";
 import Pieces from "./Pieces";
@@ -7,7 +8,8 @@ const BoardContext = createContext();
 export const useBoard = () => useContext(BoardContext);
 
 function Board({ size }) {
-  const { game } = useGameDB();
+  const { uid } = useAuth();
+  const { game, playMove } = useGameDB();
   const positions = createPositions(size);
   const [activePiece, setActivePiece] = useState({});
   const [activeMoves, setActiveMoves] = useState([]);
@@ -21,10 +23,24 @@ function Board({ size }) {
       setActivePiece({ rank, file });
     }
 
-    const moves = game.moves.filter(
-      (move) => move.from.rank === rank && move.from.file === file
+    if (
+      (game.turn === "w" && game.pwhite.uid === uid) ||
+      (game.turn === "b" && game.pblack.uid === uid)
+    ) {
+      const moves = game.moves.filter(
+        (move) => move.from.rank === rank && move.from.file === file
+      );
+      setActiveMoves(moves);
+    }
+  };
+
+  const playRankFile = (toRank, toFile) => {
+    const move = activeMoves.find(
+      (activeMove) =>
+        activeMove.to.rank === toRank && activeMove.to.file === toFile
     );
-    setActiveMoves(moves);
+    if (!move) throw new Error("can't find move!");
+    playMove(move);
   };
 
   const removeFocus = () => {
@@ -49,6 +65,7 @@ function Board({ size }) {
           activePiece,
           getMovesFromRankFile,
           removeFocus,
+          playRankFile,
         }}
       >
         <Panels />
