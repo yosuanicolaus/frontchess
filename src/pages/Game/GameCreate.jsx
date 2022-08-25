@@ -14,7 +14,7 @@ const incrementsInSeconds = [
 const DEFAULT_MINUTE = 10;
 const DEFAULT_INCREMENT = 5;
 
-function GameEmpty() {
+function GameCreate() {
   const { postGameNew } = useApi();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -94,4 +94,4 @@ function GameEmpty() {
   );
 }
 
-export default GameEmpty;
+export default GameCreate;
