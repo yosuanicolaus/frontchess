@@ -14,6 +14,8 @@ export function Pieces({ board, positions, size }) {
           x={x}
           y={y}
           size={size}
+          rank={rank}
+          file={file}
           key={`${code}-${rank}-${file}`}
         />
       );
@@ -23,13 +25,13 @@ export function Pieces({ board, positions, size }) {
   return pieces.map((piece) => piece);
 }
 
-function Piece({ code, x, y, size }) {
-  let svgCode;
-  if (code.toUpperCase() === code) {
-    svgCode = "w" + code;
-  } else {
-    svgCode = "b" + code.toUpperCase();
-  }
+function Piece({ code, x, y, size, rank, file }) {
+  const svgCode = getSvgCode(code);
+
+  const handleClick = () => {
+    console.log("get moves for rank file:", rank, file);
+  };
+
   return (
     <img
       src={`/pieces/${svgCode}.svg`}
@@ -41,6 +43,17 @@ function Piece({ code, x, y, size }) {
         width: size,
         height: size,
       }}
+      onClick={handleClick}
     />
   );
+}
+
+function getSvgCode(code) {
+  let svgCode;
+  if (code.toUpperCase() === code) {
+    svgCode = "w" + code;
+  } else {
+    svgCode = "b" + code.toUpperCase();
+  }
+  return svgCode;
 }
