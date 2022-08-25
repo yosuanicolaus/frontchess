@@ -27,6 +27,11 @@ function Board({ size }) {
     setActiveMoves(moves);
   };
 
+  const removeFocus = () => {
+    setActivePiece({});
+    setActiveMoves([]);
+  };
+
   return (
     <main
       className="position-relative"
@@ -40,8 +45,10 @@ function Board({ size }) {
         value={{
           positions,
           size,
-          getMovesFromRankFile,
           activeMoves,
+          activePiece,
+          getMovesFromRankFile,
+          removeFocus,
         }}
       >
         <Panels />
