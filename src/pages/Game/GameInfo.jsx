@@ -66,19 +66,26 @@ function UserInfo({ user }) {
 }
 
 function PlayingInfo() {
+  const { uid } = useAuth();
   const { game } = useGameDB();
+
+  let playerMe, playerOpponent;
+  if (uid === game.pwhite.uid) {
+    playerMe = game.pwhite;
+    playerOpponent = game.pblack;
+  } else if (uid === game.pblack.uid) {
+    playerMe = game.pblack;
+    playerOpponent = game.pwhite;
+  } else {
+    // TODO: implement viewer's perspective
+    throw new Error("Implement viewer's info perspective");
+  }
 
   return (
     <>
-      <div className="row text-bg-dark">
-        <PlayerInfo player={game.pblack} />
-      </div>
-      <div className="row flex-grow-1 d-flex text-bg-primary bg-gradient">
-        <PlayHistory history={game.history} />
-      </div>
-      <div className="row text-bg-light">
-        <PlayerInfo player={game.pwhite} />
-      </div>
+      <PlayerInfo player={playerOpponent} />
+      <PlayHistory />
+      <PlayerInfo player={playerMe} />
     </>
   );
 }
@@ -87,16 +94,22 @@ function PlayHistory() {
   const { game } = useGameDB();
 
   return (
-    <div className="m-auto">
-      <div>History: {game.history.toString()}</div>
-      <div>PGN: {game.pgn}</div>
+    <div className="row flex-grow-1 d-flex text-bg-primary bg-gradient">
+      <div className="m-auto">
+        <div>PGN: {game.pgn}</div>
+      </div>
     </div>
   );
 }
 
 function PlayerInfo({ player }) {
+  const { game } = useGameDB();
+  let playerClass = "row ";
+  if (player.uid === game.pwhite.uid) playerClass += "text-bg-light";
+  if (player.uid === game.pblack.uid) playerClass += "text-bg-dark";
+
   return (
-    <div>
+    <div className={playerClass}>
       <strong>{player.name}</strong>
       <div className="fst-italic">Active: {player.active.toString()}</div>
       <div className="fst-italic">Online: {player.online.toString()}</div>
