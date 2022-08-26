@@ -36,7 +36,7 @@ function Board({ size }) {
   };
 
   const configurePanels = (moves, activeRank, activeFile) => {
-    const copyPanels = getCopyBoardPanels(game.board);
+    const copyPanels = createBoardPanels(game.board);
 
     moves.forEach((move) => {
       const { rank, file } = move.to;
@@ -63,11 +63,11 @@ function Board({ size }) {
   const removeFocus = () => {
     setActivePiece({});
     setActiveMoves([]);
-    setPanels(getCopyBoardPanels(game.board));
+    setPanels(createBoardPanels(game.board));
   };
 
   useEffect(() => {
-    setPanels(getCopyBoardPanels(game.board));
+    setPanels(createBoardPanels(game.board));
   }, [game.board]);
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const defaultPanels = [
   [0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-const getCopyBoardPanels = (board) => {
+const createBoardPanels = (board) => {
   const copyPanels = defaultPanels.map((arr) => arr.slice());
 
   for (let rank = 0; rank < 8; rank++) {

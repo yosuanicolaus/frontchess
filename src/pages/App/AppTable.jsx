@@ -1,24 +1,24 @@
 function AppTable() {
   const dummyData = [
     {
-      username: "johndoe1995",
+      name: "johndoe1995",
       elo: 1348,
-      time: "10+5",
+      timeControl: "10+5",
     },
     {
-      username: "BobRoss",
+      name: "BobRoss",
       elo: 1801,
-      time: "2+1",
+      timeControl: "2+1",
     },
     {
-      username: "Jack-5",
+      name: "Jack-5",
       elo: 1500,
-      time: "3+0",
+      timeControl: "3+0",
     },
     {
-      username: "CaroKhanPlease",
+      name: "CaroKhanPlease",
       elo: 927,
-      time: "10+0",
+      timeControl: "10+0",
     },
   ];
 
@@ -39,9 +39,9 @@ function AppTable() {
           dummyData.map((data, idx) => (
             <tr key={`apptable-${idx}`}>
               <th scope="row">{idx}</th>
-              <td>{data.username}</td>
+              <td>{data.name}</td>
               <td>{data.elo}</td>
-              <td>{data.time}</td>
+              <td>{data.timeControl}</td>
             </tr>
           ))}
       </tbody>

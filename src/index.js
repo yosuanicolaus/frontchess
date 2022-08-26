@@ -8,7 +8,7 @@ import App from "./pages/App/App";
 import Game from "./pages/Game/Game";
 import GameCreate from "./pages/Game/GameCreate";
 import Navbar from "./components/Navbar";
-import Login from "./pages/Login/Login";
+import Login from "./pages/User/Login";
 import Test from "./components/Test";
 import { AuthProvider } from "./helper/auth";
 

@@ -19,7 +19,6 @@ function AppRoom() {
   };
 
   const handleSubmitJoin = async (e) => {
-    // TODO: handle if user enters the game's link instead of id
     e.preventDefault();
     let id = joinID;
     if (loading) return;
@@ -60,7 +59,6 @@ function AppRoom() {
     navigate("/game");
   };
 
-  // TODO: when (loading), disable all buttons
   return (
     <>
       <form className="d-flex gap-2" onSubmit={handleSubmitJoin}>
