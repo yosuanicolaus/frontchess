@@ -12,6 +12,7 @@ function Board({ size }) {
   const { uid } = useAuth();
   const { game, playMove } = useGameDB();
   const positions = createPositions(size);
+  const [flipped, setFlipped] = useState(uid === game.pblack.uid);
   const [panels, setPanels] = useState(defaultPanels);
   const [activePiece, setActivePiece] = useState({});
   const [activeMoves, setActiveMoves] = useState([]);
@@ -69,6 +70,15 @@ function Board({ size }) {
     setPanels(getCopyBoardPanels(game.board));
   }, [game.board]);
 
+  useEffect(() => {
+    document.onkeydown = (e) => {
+      if (e.key === "f") {
+        setFlipped((value) => !value);
+        console.log("flip board");
+      }
+    };
+  }, []);
+
   return (
     <main
       className="position-relative"
@@ -81,6 +91,7 @@ function Board({ size }) {
       <BoardContext.Provider
         value={{
           positions,
+          flipped,
           size,
           panels,
           activeMoves,

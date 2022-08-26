@@ -1,24 +1,20 @@
 import { useBoard } from "./Board";
 
 export default function FrontPanels() {
-  const { panels, positions, size } = useBoard();
+  const { panels, positions, size, flipped } = useBoard();
   const panelSize = size / 8;
   const frontPanels = [];
 
   for (let rank = 0; rank < 8; rank++) {
     for (let file = 0; file < 8; file++) {
       let panel;
-      const { x, y } = positions[rank][file];
+      const r = flipped ? 7 - rank : rank;
+      const f = flipped ? 7 - file : file;
+      const { x, y } = positions[r][f];
+      const key = `front-panel-${r}-${f}`;
       switch (panels[rank][file]) {
         case 0:
-          panel = (
-            <NormalPanel
-              x={x}
-              y={y}
-              size={panelSize}
-              key={`front-panel-${rank}-${file}`}
-            />
-          );
+          panel = <NormalPanel x={x} y={y} size={panelSize} key={key} />;
           break;
         case 1:
           panel = (
@@ -28,7 +24,7 @@ export default function FrontPanels() {
               size={panelSize}
               rank={rank}
               file={file}
-              key={`front-panel-${rank}-${file}`}
+              key={key}
             />
           );
           break;
@@ -41,7 +37,7 @@ export default function FrontPanels() {
               size={panelSize}
               rank={rank}
               file={file}
-              key={`front-panel-${rank}-${file}`}
+              key={key}
             />
           );
           break;
@@ -53,7 +49,7 @@ export default function FrontPanels() {
               size={panelSize}
               rank={rank}
               file={file}
-              key={`front-panel-${rank}-${file}`}
+              key={key}
             />
           );
       }

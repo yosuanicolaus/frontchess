@@ -1,21 +1,24 @@
 import { useBoard } from "./Board";
 
 export default function BackPanels() {
-  const { positions, size, panels } = useBoard();
+  const { positions, size, panels, flipped } = useBoard();
   const panelSize = size / 8;
   const backPanels = [];
 
   for (let rank = 0; rank < 8; rank++) {
     for (let file = 0; file < 8; file++) {
       if (panels[rank][file] >= 2) {
-        const { x, y } = positions[rank][file];
+        const r = flipped ? 7 - rank : rank;
+        const f = flipped ? 7 - file : file;
+        const { x, y } = positions[r][f];
+        const code = panels[r][f];
         backPanels.push(
           <BackPanel
             x={x}
             y={y}
             size={panelSize}
-            code={panels[rank][file]}
-            key={`back-panel-${rank}-${file}`}
+            code={code}
+            key={`back-panel-${r}-${f}`}
           />
         );
       }
