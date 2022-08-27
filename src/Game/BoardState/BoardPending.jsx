@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Loading from "../../../components/Loading";
-import { useAuth } from "../../../helper/auth";
+import Loading from "../../components/Loading";
+import { useAuth } from "../../helper/auth";
 import { useGameDB } from "../GameHooks";
 
 export default function BoardPending() {

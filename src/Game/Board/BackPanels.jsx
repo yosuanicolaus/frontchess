@@ -11,7 +11,7 @@ export default function BackPanels() {
         const r = flipped ? 7 - rank : rank;
         const f = flipped ? 7 - file : file;
         const { x, y } = positions[r][f];
-        const code = panels[r][f];
+        const code = panels[rank][file];
         backPanels.push(
           <BackPanel
             x={x}

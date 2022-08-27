@@ -23,7 +23,7 @@ function Game() {
           </div>
 
           <div className="row footer text-bg-primary text-center">
-            <div className="col">anonym_123 vs john1995</div>
+            <div className="col opacity-50">&copy; yosuanicolaus 2022</div>
           </div>
         </div>
       </main>

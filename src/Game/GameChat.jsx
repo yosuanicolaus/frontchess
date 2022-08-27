@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useRef } from "react";
-import Loading from "../../components/Loading";
-import { useAuth } from "../../helper/auth";
-import { useChat } from "../../helper/chat";
+import Loading from "../components/Loading";
+import { useAuth } from "../helper/auth";
+import { useChat } from "../helper/chat";
 import { useGameDB } from "./GameHooks";
 
 function GameChat() {

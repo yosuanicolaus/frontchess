@@ -4,11 +4,11 @@ import "./style.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import App from "./pages/App/App";
-import Game from "./pages/Game/Game";
-import GameCreate from "./pages/Game/GameCreate";
+import App from "./App/App";
+import Game from "./Game/Game";
+import GameCreate from "./Game/GameCreate";
 import Navbar from "./components/Navbar";
-import Login from "./pages/User/Login";
+import Login from "./User/Login";
 import Test from "./components/Test";
 import { AuthProvider } from "./helper/auth";
 

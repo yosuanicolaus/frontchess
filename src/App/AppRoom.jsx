@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../components/Loading";
-import { useApi } from "../../helper/api";
+import Loading from "../components/Loading";
+import { useApi } from "../helper/api";
 import { isValid, convertLink } from "./utils";
 
 function AppRoom() {

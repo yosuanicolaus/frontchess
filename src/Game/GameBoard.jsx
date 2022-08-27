@@ -1,10 +1,10 @@
 import { useRef, useState, useEffect } from "react";
-import { useDimensions } from "../../helper/dimensions";
+import { useDimensions } from "../helper/dimensions";
 import { useGameDB } from "./GameHooks";
-import BoardEmpty from "./Board/BoardEmpty";
-import BoardWaiting from "./Board/BoardWaiting";
-import BoardPending from "./Board/BoardPending";
-import BoardReady from "./Board/BoardReady";
+import BoardEmpty from "./BoardState/BoardEmpty";
+import BoardWaiting from "./BoardState/BoardWaiting";
+import BoardPending from "./BoardState/BoardPending";
+import BoardReady from "./BoardState/BoardReady";
 import Board from "./Board/Board";
 
 function GameBoard() {

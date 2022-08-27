@@ -1,6 +1,6 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
-import LoadingPage from "../../components/LoadingPage";
-import { useSocket } from "../../helper/socket";
+import LoadingPage from "../components/LoadingPage";
+import { useSocket } from "../helper/socket";
 
 const GameContext = createContext();
 

@@ -1,4 +1,4 @@
-import { useAuth } from "../../helper/auth";
+import { useAuth } from "../helper/auth";
 import { useGameDB } from "./GameHooks";
 
 function GameInfo() {
@@ -111,8 +111,11 @@ function PlayerInfo({ player }) {
   return (
     <div className={playerClass}>
       <strong>{player.name}</strong>
-      <div className="fst-italic">Active: {player.active.toString()}</div>
-      <div className="fst-italic">Online: {player.online.toString()}</div>
+
+      {player.active && (
+        <div className="fst-italic text-success fw-bold">Active</div>
+      )}
+      {!player.active && <div className="fst-italic">Inactive</div>}
     </div>
   );
 }

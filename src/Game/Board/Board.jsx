@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { useAuth } from "../../../helper/auth";
+import { useAuth } from "../../helper/auth";
 import { useGameDB } from "../GameHooks";
 import BackPanels from "./BackPanels";
 import FrontPanels from "./FrontPanels";
