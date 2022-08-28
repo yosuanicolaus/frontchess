@@ -2,7 +2,8 @@ import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useRef } from "react";
 import Loading from "../components/Loading";
 import { useAuth } from "../helper/auth";
-import { Message, useChat } from "../helper/chat";
+import { useChat } from "../helper/chat";
+import { Message } from "../helper/types";
 import { useGameDB } from "./GameHooks";
 
 function GameChat() {

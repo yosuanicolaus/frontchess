@@ -1,19 +1,7 @@
 import { useState, useEffect } from "react";
 import { useApi } from "./api";
 import { useSocket } from "./socket";
-
-export interface Message {
-  _id: string;
-  text: string;
-  username: string;
-  uid: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface Chat {
-  messages: Message[];
-}
+import { Chat } from "./types";
 
 export function useChat(id: string) {
   const [chat, setChat] = useState<Chat | null>(null);
