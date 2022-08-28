@@ -1,22 +1,21 @@
-import { useState, useEffect, MutableRefObject } from "react";
+import { useState, useEffect, RefObject } from "react";
 
-export function useDimensions(divRef: MutableRefObject<HTMLDivElement>) {
+export function useDimensions(divRef: RefObject<HTMLDivElement>) {
   const [dimensions, setDimensions] = useState({
     width: 0,
     height: 0,
   });
 
   useEffect(() => {
-    const getDimensions = () => ({
-      width: divRef.current.offsetWidth,
-      height: divRef.current.offsetHeight,
-    });
-
     const handleResize = () => {
-      setDimensions(getDimensions());
+      if (!divRef.current) return;
+      setDimensions({
+        width: divRef.current.offsetWidth,
+        height: divRef.current.offsetHeight,
+      });
     };
 
-    if (divRef.current) handleResize();
+    handleResize();
 
     window.addEventListener("resize", handleResize);
     return () => {

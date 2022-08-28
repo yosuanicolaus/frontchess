@@ -1,4 +1,10 @@
-import { useRef, useState, useEffect } from "react";
+import {
+  useRef,
+  useState,
+  useEffect,
+  SetStateAction,
+  ChangeEvent,
+} from "react";
 import { useDimensions } from "../helper/dimensions";
 import { useGameDB } from "./GameHooks";
 import BoardEmpty from "./BoardState/BoardEmpty";
@@ -6,14 +12,15 @@ import BoardWaiting from "./BoardState/BoardWaiting";
 import BoardPending from "./BoardState/BoardPending";
 import BoardReady from "./BoardState/BoardReady";
 import Board from "./Board/Board";
+import { Dispatch } from "react";
 
 function GameBoard() {
-  const ref = useRef();
+  const ref = useRef<HTMLDivElement>(null);
   const dim = useDimensions(ref);
   const { game } = useGameDB();
   const [size, setSize] = useState(450);
 
-  const getBoard = (state) => {
+  const getBoard = (state: string) => {
     switch (state) {
       case "empty":
         return <BoardEmpty />;
@@ -47,20 +54,30 @@ function GameBoard() {
   );
 }
 
-function SizeControl({ size, setSize, dim }) {
+interface ControlProps {
+  size: number;
+  setSize: Dispatch<SetStateAction<number>>;
+  dim: {
+    width: number;
+    height: number;
+  };
+}
+
+function SizeControl({ size, setSize, dim }: ControlProps) {
   const min = 400;
   const [max, setMax] = useState(600);
   const [disabled, setDisabled] = useState(false);
 
-  const setFloorSize = (value) => {
+  const setFloorSize = (value: number) => {
     setSize(Math.floor(value));
   };
 
-  const handleSlide = (e) => {
-    setFloorSize(e.target.value);
+  const handleSlide = (e: ChangeEvent<HTMLInputElement>) => {
+    const numberValue = Number(e.target.value);
+    setFloorSize(numberValue);
   };
 
-  const lerp = (a, b, t) => {
+  const lerp = (a: number, b: number, t: number) => {
     return a + (b - a) * t;
   };
 
