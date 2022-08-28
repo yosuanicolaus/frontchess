@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { Dispatch, SetStateAction, useEffect } from "react";
 
-function Loading({ text, setLoading }) {
-  const cancel = () => {
-    setLoading(false);
-  };
+interface Props {
+  text?: string;
+  setLoading?: Dispatch<SetStateAction<string | null>>;
+}
 
+function Loading({ text, setLoading }: Props) {
   useEffect(() => {
     document.body.style.cursor = "wait";
     return () => {
@@ -19,7 +20,9 @@ function Loading({ text, setLoading }) {
       <span className="spinner-border text-primary"></span>
       <span className="mx-3 my-auto lead">{text}</span>
       {setLoading && (
-        <button className="btn btn-sm btn-outline-dark" onClick={cancel}>
+        <button className="btn btn-sm btn-outline-dark" onClick={() => {
+          setLoading(null);
+        }}>
           Cancel
         </button>
       )}
