@@ -16,7 +16,7 @@ socket.on("reload", () => {
   window.location.reload();
 });
 
-export function useSocket(id) {
+export function useSocket(id: string) {
   useEffect(() => {
     socket.emit("join", { id });
 

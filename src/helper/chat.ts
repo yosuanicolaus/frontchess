@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useApi } from "./api";
 import { useSocket } from "./socket";
 
-export function useChat(id) {
+export function useChat(id: string) {
   const [chat, setChat] = useState();
   const socket = useSocket(id);
   const { getChat } = useApi();
@@ -28,7 +28,7 @@ export function useChat(id) {
   return {
     chat,
 
-    sendMessage: function (text) {
+    sendMessage: function (text: string) {
       socket.emit("new-message", { id, text });
     },
   };
