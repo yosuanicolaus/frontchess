@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useApi } from "../helper/api";
@@ -6,19 +6,19 @@ import { isValid, convertLink } from "./utils";
 
 function AppRoom() {
   const { getGame, getGameRandomOpen } = useApi();
-  const [loading, setLoading] = useState(false);
-  const [invalid, setInvalid] = useState(false);
-  const [noGame, setNoGame] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
+  const [invalid, setInvalid] = useState<string | null>(null);
+  const [noGame, setNoGame] = useState<string | null>(null);
   const [joinID, setJoinID] = useState("");
   const navigate = useNavigate();
 
-  const handleChangeJoin = (e) => {
+  const handleChangeJoin = (e: ChangeEvent<HTMLInputElement>) => {
     setJoinID(e.target.value);
-    setInvalid(false);
-    setNoGame(false);
+    setInvalid(null);
+    setNoGame(null);
   };
 
-  const handleSubmitJoin = async (e) => {
+  const handleSubmitJoin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let id = joinID;
     if (loading) return;
@@ -27,15 +27,15 @@ function AppRoom() {
     setLoading(`Looking for a game with id of ${id}`);
     const data = await getGame(id);
     if (typeof data === "string") {
-      setLoading(false);
-      setNoGame(false);
+      setLoading(null);
+      setNoGame(null);
       setInvalid(data);
       return;
     }
     joinGame(id);
   };
 
-  const joinGame = async (id) => {
+  const joinGame = async (id: string) => {
     setLoading(`Joining game ${id}...`);
     navigate(`/game/${id}`);
   };
@@ -45,8 +45,8 @@ function AppRoom() {
     setLoading("Looking for an open game...");
     const data = await getGameRandomOpen();
     if (typeof data === "string") {
-      setLoading(false);
-      setInvalid(false);
+      setLoading(null);
+      setInvalid(null);
       setNoGame(data);
       return;
     }
