@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useRef } from "react";
 import Loading from "../components/Loading";
 import { useAuth } from "../helper/auth";
-import { useChat } from "../helper/chat";
+import { Message, useChat } from "../helper/chat";
 import { useGameDB } from "./GameHooks";
 
 function GameChat() {
@@ -10,10 +10,10 @@ function GameChat() {
   const chatID = game.chat;
   const { chat, sendMessage } = useChat(chatID);
   const [textInput, setTextInput] = useState("");
-  const endMessageRef = useRef();
+  const endMessageRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSend = (e) => {
+  const handleSend = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const text = textInput.trim();
     if (!text) return;
@@ -22,7 +22,7 @@ function GameChat() {
     setTextInput("");
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTextInput(e.target.value);
   };
 
@@ -41,7 +41,7 @@ function GameChat() {
           style={{ overflowY: "auto", height: 0 }}
         >
           {chat.messages.map((message) => (
-            <Message message={message} key={message._id} />
+            <ChatMessage message={message} key={message._id} />
           ))}
           {loading && <Loading text={"sending message..."} />}
           <div ref={endMessageRef} />
@@ -74,7 +74,7 @@ function GameChat() {
   );
 }
 
-function Message({ message }) {
+function ChatMessage({ message }: { message: Message }) {
   const { uid } = useAuth();
   const isMe = message.uid === uid;
   const date = new Date(message.createdAt);
