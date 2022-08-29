@@ -6,6 +6,7 @@ import GameInfo from "./GameInfo";
 
 function Game() {
   const { id } = useParams();
+  if (!id) return <>id params not detected</>;
 
   return (
     <GameProvider id={id}>
