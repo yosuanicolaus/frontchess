@@ -1,10 +1,11 @@
 import { useAuth } from "../helper/auth";
+import { Player, User } from "../helper/types";
 import { useGameDB } from "./GameHooks";
 
 function GameInfo() {
   const { game } = useGameDB();
 
-  const getInfo = (state) => {
+  const getInfo = (state: string) => {
     switch (state) {
       case "empty":
       case "waiting":
@@ -47,7 +48,7 @@ function PreInfo() {
   );
 }
 
-function UserInfo({ user }) {
+function UserInfo({ user }: { user: User }) {
   return (
     <div
       className="my-auto flex-grow-1"
@@ -102,7 +103,7 @@ function PlayHistory() {
   );
 }
 
-function PlayerInfo({ player }) {
+function PlayerInfo({ player }: { player: Player }) {
   const { game } = useGameDB();
   let playerClass = "row ";
   if (player.uid === game.pwhite.uid) playerClass += "text-bg-light";

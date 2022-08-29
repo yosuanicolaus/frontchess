@@ -18,7 +18,9 @@ function Test() {
     postGameStart,
   } = useApi();
 
-  const testData = [
+  type TestData = [(...args: any[]) => Promise<JSON>, ...string[]][];
+
+  const testData: TestData = [
     [getAllData],
     [getGame, "MeUWJyMeS6"],
     [getGameRandomOpen],
@@ -33,7 +35,10 @@ function Test() {
     [postChatNewMessage, "62feff3bf529befef32e3e28", "hello"],
   ];
 
-  const logApi = (apiFunction, ...args) => {
+  const logApi = (
+    apiFunction: (...args: any[]) => Promise<JSON>,
+    ...args: any[]
+  ) => {
     apiFunction(...args).then((data) => {
       console.log(apiFunction.name);
       console.log(...args);
@@ -61,8 +66,8 @@ function Test() {
         <textarea
           name="log"
           id="log"
-          cols="75"
-          rows="30"
+          cols={75}
+          rows={30}
           value={log}
           className="font-monospace small"
           readOnly={true}

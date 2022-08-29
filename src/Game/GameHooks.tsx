@@ -1,22 +1,37 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import LoadingPage from "../components/LoadingPage";
 import { useSocket } from "../helper/socket";
+import { GameModel, Move } from "../helper/types";
 
-const GameContext = createContext();
+interface GameContextInterface {
+  game: GameModel;
+  toggleReady: () => void;
+  startGame: () => void;
+  playMove: (move: Move) => void;
+}
+
+const GameContext = createContext<GameContextInterface>(
+  {} as GameContextInterface
+);
 
 export function useGameDB() {
   return useContext(GameContext);
 }
 
-export function GameProvider({ id, children }) {
-  const [game, setGame] = useState();
+interface GameProviderProps {
+  id: string;
+  children: JSX.Element;
+}
+
+export function GameProvider({ id, children }: GameProviderProps) {
+  const [game, setGame] = useState<GameModel | null>(null);
   const socket = useSocket(id);
 
   useEffect(() => {
     if (!id || !socket) return;
     socket.emit("join-game", { id });
 
-    socket.on("update-game", (game) => {
+    socket.on("update-game", (game: GameModel) => {
       console.log("updating game state");
       setGame(game);
     });
@@ -27,23 +42,20 @@ export function GameProvider({ id, children }) {
     };
   }, [id, socket]);
 
+  if (!game) return <LoadingPage text={"Fetching game from DB..."} />;
+
   const value = {
     game,
-
     toggleReady: function () {
       socket.emit("toggle", { id });
     },
-
     startGame: function () {
       socket.emit("start", { id });
     },
-
-    playMove: function (move) {
+    playMove: function (move: Move) {
       socket.emit("play", { id, move });
     },
   };
-
-  if (!game) return <LoadingPage text={"Fetching game from DB..."} />;
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

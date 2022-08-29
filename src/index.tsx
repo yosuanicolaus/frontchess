@@ -12,7 +12,7 @@ import Login from "./User/Login";
 import Test from "./components/Test";
 import { AuthProvider } from "./helper/auth";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <main className="d-flex flex-column min-vh-100">
     <AuthProvider>

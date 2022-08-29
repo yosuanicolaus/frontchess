@@ -17,20 +17,27 @@ export default function BackPanels() {
             x={x}
             y={y}
             size={panelSize}
-            code={code}
+            panelCode={code}
             key={`back-panel-${r}-${f}`}
           />
         );
       }
     }
   }
-  return backPanels.map((panel) => panel);
+  return <>{backPanels.map((panel) => panel)}</>;
 }
 
-function BackPanel({ x, y, size, code }) {
+type BackPanelProps = {
+  x: number;
+  y: number;
+  size: number;
+  panelCode: number;
+};
+
+function BackPanel({ x, y, size, panelCode }: BackPanelProps) {
   return (
     <img
-      src={getSvgFromCode(code)}
+      src={getSvgFromCode(panelCode)}
       alt={""}
       style={{
         position: "absolute",
@@ -43,7 +50,7 @@ function BackPanel({ x, y, size, code }) {
   );
 }
 
-function getSvgFromCode(code) {
+function getSvgFromCode(code: number) {
   const defaultMove = "/icons/clover.svg";
   const defaultCapture = "/icons/level-four.svg";
   const defaultPiece = "/icons/clover-spiked.svg";

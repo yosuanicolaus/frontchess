@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useAuth } from "./auth";
 
 const API_URL =
@@ -8,35 +8,43 @@ const API_URL =
 
 axios.defaults.baseURL = API_URL;
 
-const apiGet = async (path) => {
+const handleError = (error: unknown) => {
+  if (error && error instanceof AxiosError) {
+    return error.response?.data;
+  } else {
+    console.log(error);
+  }
+};
+
+const apiGet = async (path: string) => {
   try {
     const response = await axios.get(path);
     const data = await response.data;
     return data;
   } catch (error) {
-    return error.response.data;
+    return handleError(error);
   }
 };
 
-const apiPost = async (path, postData) => {
+const apiPost = async (path: string, postData?: Object) => {
   try {
     const response = await axios.post(path, postData);
     const data = await response.data;
     return data;
   } catch (error) {
-    return error.response.data;
+    return handleError(error);
   }
 };
 
 export function useApi() {
-  const { username, uid } = useAuth();
+  const { name, uid } = useAuth();
 
   return {
     getAllData: function () {
       return apiGet("/");
     },
 
-    getGame: function (id) {
+    getGame: function (id: string) {
       return apiGet(`/game/${id}`);
     },
 
@@ -44,23 +52,23 @@ export function useApi() {
       return apiGet("/game/random/open");
     },
 
-    postGameNew: function (timeControl) {
+    postGameNew: function (timeControl: string) {
       return apiPost("/game/new", { timeControl });
     },
 
-    postGameJoin: function (id) {
+    postGameJoin: function (id: string) {
       return apiPost(`/game/${id}/join`, { uid });
     },
 
-    postGameLeave: function (id) {
+    postGameLeave: function (id: string) {
       return apiPost(`/game/${id}/leave`, { uid });
     },
 
-    postGameReady: function (id) {
+    postGameReady: function (id: string) {
       return apiPost(`/game/${id}/ready`, { uid });
     },
 
-    postGameStart: function (id) {
+    postGameStart: function (id: string) {
       return apiPost(`/game/${id}/start`, { uid });
     },
 
@@ -72,20 +80,20 @@ export function useApi() {
       return apiPost("/chat/new");
     },
 
-    getChat: function (id) {
+    getChat: function (id: string) {
       return apiGet(`/chat/${id}`);
     },
 
-    postChatNewMessage: function (id, text) {
-      return apiPost(`/chat/${id}/new-message`, { text, username, uid });
+    postChatNewMessage: function (id: string, text: string) {
+      return apiPost(`/chat/${id}/new-message`, { text, username: name, uid });
     },
   };
 }
 
-export function firstSignIn(uid) {
+export function firstSignIn(uid: string) {
   return apiPost("/user/new", { uid });
 }
 
-export function firstLogIn(uid) {
+export function firstLogIn(uid: string) {
   return apiGet(`/user/${uid}`);
 }

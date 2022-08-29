@@ -16,16 +16,30 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const AuthContext = createContext();
+
+type AuthContextValue = {
+  name: string;
+  uid: string;
+};
+
+const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
 
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-export function AuthProvider({ children }) {
-  const [uid, setUid] = useState("");
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(true);
+type AuthProviderProps = {
+  children: JSX.Element;
+};
+
+type UserDB = {
+  name: string;
+  uid: string;
+};
+
+export function AuthProvider({ children }: AuthProviderProps) {
+  const [uid, setUid] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
 
   // TODO: convert anonymous to permanent email and password account
   // https://firebase.google.com/docs/auth/web/anonymous-auth?authuser=0&hl=en
@@ -52,23 +66,18 @@ export function AuthProvider({ children }) {
     return unsubscribe;
   }, []);
 
-  const setup = (userDB) => {
+  const setup = (userDB: UserDB) => {
     const { name, uid } = userDB;
     socket.emit("setup", { name, uid });
     setUid(uid);
     setName(name);
-    setLoading(false);
   };
 
-  if (loading) return <LoadingPage text={"Signing in..."} />;
+  if (name === null || uid === null)
+    return <LoadingPage text={"Signing in..."} />;
 
   return (
-    <AuthContext.Provider
-      value={{
-        name,
-        uid,
-      }}
-    >
+    <AuthContext.Provider value={{ name, uid }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,3 +1,4 @@
+import { MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../helper/auth";
 
@@ -15,7 +16,7 @@ function Navbar() {
     },
   ];
 
-  const checkActive = (tab) => {
+  const checkActive = (tab: string) => {
     const path = window.location.pathname.split("/")[1];
     if (tab === path) {
       return "nav-link active";
@@ -24,9 +25,10 @@ function Navbar() {
     }
   };
 
-  const goTo = (e) => {
+  const goTo = (e: MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    navigate(e.target.pathname);
+    const target = e.target as HTMLAnchorElement;
+    navigate(target.pathname);
   };
 
   return (
@@ -67,7 +69,12 @@ function Navbar() {
   );
 }
 
-function UserInfo({ checkActive, goTo }) {
+type UserInfoProps = {
+  checkActive: (usename: string) => string;
+  goTo: (e: MouseEvent<HTMLAnchorElement>) => void;
+};
+
+function UserInfo({ checkActive, goTo }: UserInfoProps) {
   const { name } = useAuth();
 
   return (
