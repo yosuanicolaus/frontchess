@@ -24,7 +24,7 @@ export default function BackPanels() {
       }
     }
   }
-  return backPanels.map((panel) => panel);
+  return <>{backPanels.map((panel) => panel)}</>;
 }
 
 function BackPanel({ x, y, size, code }) {

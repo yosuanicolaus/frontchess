@@ -17,6 +17,7 @@ export interface Message {
 }
 
 export interface Chat {
+  _id: string;
   messages: Message[];
 }
 
@@ -44,14 +45,15 @@ export interface Move {
   lan: string;
   uci: string;
   fenResult: string;
+  capture?: true;
 }
 
 export interface GameModel {
   _id: string;
   timeControl: string;
-  state: string;
-  status: string;
-  turn: string;
+  state: "empty" | "waiting" | "pending" | "ready" | "playing" | "ended";
+  status: "normal" | "check" | "end";
+  turn: "w" | "b";
   fen: string;
   board: string[][];
   moves: Move[];

@@ -1,24 +1,41 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { useAuth } from "../../helper/auth";
+import { Move } from "../../helper/types";
 import { useGameDB } from "../GameHooks";
 import BackPanels from "./BackPanels";
 import FrontPanels from "./FrontPanels";
 import Pieces from "./Pieces";
 
-const BoardContext = createContext();
+type Positions = { x: number; y: number }[][];
+
+type ActivePiece = { rank: number; file: number };
+
+interface BoardContextInterface {
+  positions: Positions;
+  flipped: boolean;
+  size: number;
+  panels: number[][];
+  activeMoves: Move[];
+  activePiece: ActivePiece | null;
+  getMovesFromRankFile: (rank: number, file: number) => void;
+  removeFocus: () => void;
+  playRankFile: (toRank: number, toFile: number) => void;
+}
+
+const BoardContext = createContext({} as BoardContextInterface);
 export const useBoard = () => useContext(BoardContext);
 
-function Board({ size }) {
+function Board({ size }: { size: number }) {
   const { uid } = useAuth();
   const { game, playMove } = useGameDB();
   const positions = createPositions(size);
   const [flipped, setFlipped] = useState(uid === game.pblack.uid);
   const [panels, setPanels] = useState(defaultPanels);
-  const [activePiece, setActivePiece] = useState({});
-  const [activeMoves, setActiveMoves] = useState([]);
+  const [activePiece, setActivePiece] = useState<ActivePiece | null>(null);
+  const [activeMoves, setActiveMoves] = useState<Move[]>([]);
 
-  const getMovesFromRankFile = (rank, file) => {
-    if (activePiece.rank === rank && activePiece.file === file) {
+  const getMovesFromRankFile = (rank: number, file: number) => {
+    if (activePiece && activePiece.rank === rank && activePiece.file === file) {
       return removeFocus();
     }
 
@@ -35,7 +52,11 @@ function Board({ size }) {
     }
   };
 
-  const configurePanels = (moves, activeRank, activeFile) => {
+  const configurePanels = (
+    moves: Move[],
+    activeRank: number,
+    activeFile: number
+  ) => {
     const copyPanels = createBoardPanels(game.board);
 
     moves.forEach((move) => {
@@ -51,7 +72,7 @@ function Board({ size }) {
     setPanels(copyPanels);
   };
 
-  const playRankFile = (toRank, toFile) => {
+  const playRankFile = (toRank: number, toFile: number) => {
     const move = activeMoves.find(
       (activeMove) =>
         activeMove.to.rank === toRank && activeMove.to.file === toFile
@@ -61,7 +82,7 @@ function Board({ size }) {
   };
 
   const removeFocus = () => {
-    setActivePiece({});
+    setActivePiece(null);
     setActiveMoves([]);
     setPanels(createBoardPanels(game.board));
   };
@@ -72,7 +93,7 @@ function Board({ size }) {
 
   useEffect(() => {
     document.onkeydown = (e) => {
-      if (e.key === "f") {
+      if (e.key.toLowerCase() === "f") {
         setFlipped((value) => !value);
         console.log("flip board");
       }
@@ -120,7 +141,7 @@ const defaultPanels = [
   [0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
-const createBoardPanels = (board) => {
+const createBoardPanels = (board: string[][]) => {
   const copyPanels = defaultPanels.map((arr) => arr.slice());
 
   for (let rank = 0; rank < 8; rank++) {
@@ -132,8 +153,8 @@ const createBoardPanels = (board) => {
   return copyPanels;
 };
 
-function createPositions(size) {
-  const positions = [];
+function createPositions(size: number): Positions {
+  const positions: { x: number; y: number }[][] = [];
 
   for (let rank = 0; rank < 8; rank++) {
     positions.push([]);

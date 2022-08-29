@@ -27,7 +27,7 @@ export default function Pieces() {
       );
     }
   }
-  return pieces.map((piece) => piece);
+  return <>{pieces.map((piece) => piece)}</>;
 }
 
 function Piece({ code, x, y, size }) {

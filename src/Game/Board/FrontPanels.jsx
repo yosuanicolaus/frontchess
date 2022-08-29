@@ -56,7 +56,7 @@ export default function FrontPanels() {
       frontPanels.push(panel);
     }
   }
-  return frontPanels.map((panel) => panel);
+  return <>{frontPanels.map((panel) => panel)}</>;
 }
 
 function NormalPanel({ x, y, size }) {
