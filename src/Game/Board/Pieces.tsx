@@ -13,16 +13,16 @@ export default function Pieces() {
     for (let file = 0; file < 8; file++) {
       const r = flipped ? 7 - rank : rank;
       const f = flipped ? 7 - file : file;
-      const code = board[r][f];
-      if (code === ".") continue;
+      const boardCode = board[r][f];
+      if (boardCode === ".") continue;
       const { x, y } = positions[rank][file];
       pieces.push(
         <Piece
-          code={code}
+          boardCode={boardCode}
           x={x}
           y={y}
           size={pieceSize}
-          key={`${code}-${rank}-${file}`}
+          key={`${boardCode}-${rank}-${file}`}
         />
       );
     }
@@ -30,8 +30,15 @@ export default function Pieces() {
   return <>{pieces.map((piece) => piece)}</>;
 }
 
-function Piece({ code, x, y, size }) {
-  const svgCode = getPieceSvgCode(code);
+type PieceProps = {
+  boardCode: string;
+  x: number;
+  y: number;
+  size: number;
+};
+
+function Piece({ boardCode, x, y, size }: PieceProps) {
+  const svgCode = getPieceSvgCode(boardCode);
 
   return (
     <img
@@ -48,7 +55,7 @@ function Piece({ code, x, y, size }) {
   );
 }
 
-function getPieceSvgCode(code) {
+function getPieceSvgCode(code: string) {
   let svgCode;
   if (code.toUpperCase() === code) {
     svgCode = "w" + code;

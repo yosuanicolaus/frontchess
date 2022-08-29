@@ -59,13 +59,24 @@ export default function FrontPanels() {
   return <>{frontPanels.map((panel) => panel)}</>;
 }
 
-function NormalPanel({ x, y, size }) {
+interface NormalPanelInterface {
+  x: number;
+  y: number;
+  size: number;
+}
+
+function NormalPanel({ x, y, size }: NormalPanelInterface) {
   const { removeFocus } = useBoard();
 
   return <Panel x={x} y={y} size={size} onClick={removeFocus} />;
 }
 
-function PiecePanel({ x, y, size, rank, file }) {
+interface RFPanelInterface extends NormalPanelInterface {
+  rank: number;
+  file: number;
+}
+
+function PiecePanel({ x, y, size, rank, file }: RFPanelInterface) {
   const { getMovesFromRankFile } = useBoard();
 
   const handleClick = () => {
@@ -75,7 +86,7 @@ function PiecePanel({ x, y, size, rank, file }) {
   return <Panel x={x} y={y} size={size} onClick={handleClick} />;
 }
 
-function MovePanel({ x, y, size, rank, file }) {
+function MovePanel({ x, y, size, rank, file }: RFPanelInterface) {
   const { playRankFile } = useBoard();
 
   const handleClick = () => {
@@ -85,7 +96,11 @@ function MovePanel({ x, y, size, rank, file }) {
   return <Panel x={x} y={y} size={size} onClick={handleClick} />;
 }
 
-function Panel({ x, y, size, onClick }) {
+interface ClickPanelInterface extends NormalPanelInterface {
+  onClick: () => void;
+}
+
+function Panel({ x, y, size, onClick }: ClickPanelInterface) {
   return (
     <div
       style={{
