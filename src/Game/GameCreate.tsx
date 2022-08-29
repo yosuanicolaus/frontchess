@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useApi } from "../helper/api";
@@ -17,22 +17,14 @@ const DEFAULT_INCREMENT = 5;
 function GameCreate() {
   const { postGameNew } = useApi();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
   const [timeControl, setTimeControl] = useState(
     `${DEFAULT_MINUTE}+${DEFAULT_INCREMENT}`
   );
   const [customMinutes, setCustomMinutes] = useState(DEFAULT_MINUTE);
   const [customIncrement, setCustomIncrement] = useState(DEFAULT_INCREMENT);
 
-  const handleChangeMinute = (e) => {
-    setCustomMinutes(minutesPerSide[e.target.value]);
-  };
-
-  const handleChangeIncrement = (e) => {
-    setCustomIncrement(incrementsInSeconds[e.target.value]);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(`Creating game (${timeControl})`);
     const data = await postGameNew(timeControl);
@@ -63,7 +55,9 @@ function GameCreate() {
               min={0}
               max={minutesPerSide.length - 1}
               defaultValue={minutesPerSide.indexOf(DEFAULT_MINUTE)}
-              onChange={handleChangeMinute}
+              onChange={(e) =>
+                setCustomMinutes(minutesPerSide[Number(e.target.value)])
+              }
             />
             <label htmlFor="customRange2" className="form-label">
               Increment in seconds: <strong>{customIncrement}</strong>
@@ -75,7 +69,9 @@ function GameCreate() {
               min={0}
               max={incrementsInSeconds.length - 1}
               defaultValue={incrementsInSeconds.indexOf(DEFAULT_INCREMENT)}
-              onChange={handleChangeIncrement}
+              onChange={(e) =>
+                setCustomIncrement(incrementsInSeconds[Number(e.target.value)])
+              }
             />
           </fieldset>
           <div className="d-flex">
