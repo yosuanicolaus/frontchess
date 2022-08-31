@@ -86,7 +86,9 @@ function PlayingInfo() {
   return (
     <>
       <PlayerInfo player={playerOpponent} />
+      <PlayerTimer player={playerOpponent} />
       <PlayHistory />
+      <PlayerTimer player={playerMe} />
       <PlayerInfo player={playerMe} />
     </>
   );
@@ -179,6 +181,21 @@ function createHistoryArray(history: string[]) {
     }
   }
   return historyArray;
+}
+
+function PlayerTimer({ player }: { player: Player }) {
+  const { game } = useGameDB();
+  const timerColor =
+    (game.pwhite.active && game.pwhite.uid === player.uid) ||
+    (game.pblack.active && game.pblack.uid === player.uid)
+      ? "success"
+      : "secondary";
+
+  return (
+    <div className={`row text-end text-bg-${timerColor}`}>
+      <div className="lead">10:00</div>
+    </div>
+  );
 }
 
 export default GameInfo;
