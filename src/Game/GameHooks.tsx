@@ -1,10 +1,12 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import LoadingPage from "../components/LoadingPage";
+import { useAuth } from "../helper/auth";
 import { useSocket } from "../helper/socket";
 import { GameModel, Move } from "../helper/types";
 
 interface GameContextInterface {
   game: GameModel;
+  myTurn: boolean;
   toggleReady: () => void;
   startGame: () => void;
   playMove: (move: Move) => void;
@@ -24,8 +26,12 @@ interface GameProviderProps {
 }
 
 export function GameProvider({ id, children }: GameProviderProps) {
+  const { uid } = useAuth();
   const [game, setGame] = useState<GameModel | null>(null);
   const socket = useSocket(id);
+  const myTurn =
+    (uid === game?.pwhite?.uid && game.turn === "w") ||
+    (uid === game?.pblack?.uid && game.turn === "b");
 
   useEffect(() => {
     if (!id || !socket) return;
@@ -46,6 +52,7 @@ export function GameProvider({ id, children }: GameProviderProps) {
 
   const value = {
     game,
+    myTurn,
     toggleReady: function () {
       socket.emit("toggle", { id });
     },

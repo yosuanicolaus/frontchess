@@ -17,11 +17,21 @@ import { Dispatch } from "react";
 function GameBoard() {
   const ref = useRef<HTMLDivElement>(null);
   const dim = useDimensions(ref);
-  const { game } = useGameDB();
+  const { game, myTurn } = useGameDB();
   const [size, setSize] = useState(450);
 
-  const getBoard = (state: string) => {
-    switch (state) {
+  const boardColor = (() => {
+    if (game.state === "playing") {
+      if (myTurn) return "info";
+      else return "dark";
+    } else if (game.state === "ended") {
+      if (myTurn) return "danger";
+      else return "success";
+    } else return "primary";
+  })();
+
+  const boardState = (() => {
+    switch (game.state) {
       case "empty":
         return <BoardEmpty />;
       case "waiting":
@@ -31,21 +41,24 @@ function GameBoard() {
       case "ready":
         return <BoardReady />;
       case "playing":
+      case "ended":
         return <Board size={size} />;
       default:
         return <div>can't found board for this state!</div>;
     }
-  };
+  })();
 
   return (
     <section className="board col-md-7 col d-flex flex-column bg-light">
       <div className="d-flex flex-grow-1" ref={ref}>
-        <div className="border border-4 border-primary m-auto shadow-lg">
+        <div
+          className={`border border-4 border-${boardColor} m-auto shadow-lg`}
+        >
           <main
             style={{ height: size, width: size }}
             className="shadow-lg m-auto d-flex text-bg-dark bg-gradient"
           >
-            {getBoard(game.state)}
+            {boardState}
           </main>
         </div>
       </div>

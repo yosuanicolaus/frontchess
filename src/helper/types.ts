@@ -48,11 +48,21 @@ export interface Move {
   capture?: true;
 }
 
+export type GameState =
+  | "empty"
+  | "waiting"
+  | "pending"
+  | "ready"
+  | "playing"
+  | "ended";
+
+export type GameStatus = "normal" | "check" | "end";
+
 export interface GameModel {
   _id: string;
   timeControl: string;
-  state: "empty" | "waiting" | "pending" | "ready" | "playing" | "ended";
-  status: "normal" | "check" | "end";
+  state: GameState;
+  status: GameStatus;
   turn: "w" | "b";
   fen: string;
   board: string[][];
