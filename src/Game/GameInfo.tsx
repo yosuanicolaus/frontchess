@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../helper/auth";
 import { Player, User } from "../helper/types";
 import { useGameDB } from "./GameHooks";
@@ -6,23 +6,22 @@ import { useGameDB } from "./GameHooks";
 function GameInfo() {
   const { game } = useGameDB();
 
-  const getInfo = (state: string) => {
-    switch (state) {
+  const stateInfo = (() => {
+    switch (game.state) {
       case "empty":
       case "waiting":
       case "pending":
       case "ready":
         return <PreInfo />;
       case "playing":
+      case "ended":
         return <PlayingInfo />;
-      default:
-        return <div>can't found info for this state!</div>;
     }
-  };
+  })();
 
   return (
     <section className="bg-secondary text-center col d-md-flex flex-column d-none border-start border-5 border-primary pe-4">
-      {getInfo(game.state)}
+      {stateInfo}
     </section>
   );
 }
@@ -97,7 +96,7 @@ function PlayingInfo() {
 function PlayHistory() {
   const { game } = useGameDB();
   const historyArray = createHistoryArray(game.history);
-  const endTableRef = useRef<HTMLDivElement>(null);
+  const endTableRef = useRef<HTMLTableRowElement>(null);
 
   useEffect(() => {
     endTableRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -118,15 +117,15 @@ function PlayHistory() {
         </thead>
         <tbody>
           {historyArray.length === 0 ? (
-            <>
+            <tr>
               <td>1</td>
               <td></td>
               <td></td>
-            </>
+            </tr>
           ) : (
             <>
               {historyArray.map(({ turn, whiteSan, blackSan = "" }) => (
-                <tr>
+                <tr key={`history-${turn}`}>
                   <td>{turn}</td>
                   <td>{whiteSan}</td>
                   <td>{blackSan}</td>
@@ -134,7 +133,7 @@ function PlayHistory() {
               ))}
             </>
           )}
-          <div ref={endTableRef} />
+          <tr ref={endTableRef} />
         </tbody>
       </table>
     </div>
@@ -185,15 +184,46 @@ function createHistoryArray(history: string[]) {
 
 function PlayerTimer({ player }: { player: Player }) {
   const { game } = useGameDB();
-  const timerColor =
+  const playerActive =
     (game.pwhite.active && game.pwhite.uid === player.uid) ||
-    (game.pblack.active && game.pblack.uid === player.uid)
-      ? "success"
-      : "secondary";
+    (game.pblack.active && game.pblack.uid === player.uid);
+  const timerColor = playerActive ? "success" : "secondary";
+
+  const defaultTime =
+    (player.uid === game.pwhite.uid ? game.pwhite.time : game.pblack.time) ||
+    Number(game.timeControl.split("+")[0]) * 60_000;
+
+  const [myTime, setMyTime] = useState(defaultTime);
+  const date = new Date(myTime);
+  const display = (() => {
+    let m = date.getMinutes().toString();
+    let s = date.getSeconds().toString();
+    if (s.length === 1) s = "0" + s;
+    return `${m}:${s}`;
+  })();
+
+  useEffect(() => {
+    let timeoutID: NodeJS.Timeout;
+    let intervalID: NodeJS.Timer;
+    setMyTime(defaultTime);
+    if (!playerActive) return;
+
+    timeoutID = setTimeout(() => {
+      setMyTime((time) => time - (defaultTime % 1000));
+      intervalID = setInterval(() => {
+        setMyTime((time) => time - 1000);
+      }, 1000);
+    }, defaultTime % 1000);
+
+    return () => {
+      if (timeoutID) clearTimeout(timeoutID);
+      if (intervalID) clearInterval(intervalID);
+    };
+  }, [defaultTime, playerActive]);
 
   return (
     <div className={`row text-end text-bg-${timerColor}`}>
-      <div className="lead">10:00</div>
+      <div className="lead">{display}</div>
     </div>
   );
 }

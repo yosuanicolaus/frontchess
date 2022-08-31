@@ -28,6 +28,7 @@ export interface Player {
   elo: number;
   active: boolean;
   online: boolean;
+  time: number;
 }
 
 export interface Move {
@@ -68,6 +69,7 @@ export interface GameModel {
   board: string[][];
   moves: Move[];
   history: string[];
+  records: number[];
   pgn: string;
   pwhite: Player;
   pblack: Player;
