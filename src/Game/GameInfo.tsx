@@ -93,6 +93,8 @@ function PlayingInfo() {
 
 function PlayHistory() {
   const { game } = useGameDB();
+  const historyArray = createHistoryArray(game.history);
+  console.table(historyArray);
 
   return (
     <div className="row flex-grow-1 d-flex text-bg-primary bg-gradient">
@@ -119,6 +121,30 @@ function PlayerInfo({ player }: { player: Player }) {
       {!player.active && <div className="fst-italic">Inactive</div>}
     </div>
   );
+}
+
+type HistoryArray = {
+  turn: number;
+  whiteSan: string;
+  blackSan?: string;
+}[];
+
+function createHistoryArray(history: string[]) {
+  const historyArray: HistoryArray = [];
+  let turn = 1;
+
+  for (let i = 0; i < history.length; i++) {
+    if (i % 2 === 0) {
+      historyArray.push({
+        turn: turn,
+        whiteSan: history[i],
+      });
+    } else {
+      historyArray[turn - 1].blackSan = history[i];
+      turn++;
+    }
+  }
+  return historyArray;
 }
 
 export default GameInfo;
