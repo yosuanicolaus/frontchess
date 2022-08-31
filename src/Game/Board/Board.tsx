@@ -27,9 +27,9 @@ export const useBoard = () => useContext(BoardContext);
 
 function Board({ size }: { size: number }) {
   const { uid } = useAuth();
-  const { game, playMove } = useGameDB();
+  const { game, myTurn, playMove } = useGameDB();
   const positions = createPositions(size);
-  const [flipped, setFlipped] = useState(uid === game.pblack.uid);
+  const [flipped, setFlipped] = useState(uid === game.pblack?.uid);
   const [panels, setPanels] = useState(defaultPanels);
   const [activePiece, setActivePiece] = useState<ActivePiece | null>(null);
   const [activeMoves, setActiveMoves] = useState<Move[]>([]);
@@ -40,10 +40,7 @@ function Board({ size }: { size: number }) {
     }
 
     setActivePiece({ rank, file });
-    if (
-      (game.turn === "w" && game.pwhite.uid === uid) ||
-      (game.turn === "b" && game.pblack.uid === uid)
-    ) {
+    if (myTurn) {
       const moves = game.moves.filter(
         (move) => move.from.rank === rank && move.from.file === file
       );
@@ -73,10 +70,19 @@ function Board({ size }: { size: number }) {
   };
 
   const playRankFile = (toRank: number, toFile: number) => {
-    const move = activeMoves.find(
+    let move: Move;
+    console.log("playing", toRank, toFile);
+    const moves = activeMoves.filter(
       (activeMove) =>
         activeMove.to.rank === toRank && activeMove.to.file === toFile
     );
+    if (moves.length === 4) {
+      // TODO: select 1 out of 4 possible promotion move using modal
+      console.log("promotion move");
+      move = moves[0];
+    } else if (moves.length === 1) {
+      move = moves[0];
+    } else throw new Error("move length is not 1/4?!");
     if (!move) throw new Error("can't find move!");
     playMove(move);
   };
