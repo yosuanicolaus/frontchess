@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { useAuth } from "../helper/auth";
 import { Player, User } from "../helper/types";
 import { useGameDB } from "./GameHooks";
@@ -94,13 +95,46 @@ function PlayingInfo() {
 function PlayHistory() {
   const { game } = useGameDB();
   const historyArray = createHistoryArray(game.history);
-  console.table(historyArray);
+  const endTableRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    endTableRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [historyArray]);
 
   return (
-    <div className="row flex-grow-1 d-flex text-bg-primary bg-gradient">
-      <div className="m-auto">
-        <div>PGN: {game.pgn}</div>
-      </div>
+    <div
+      className="row flex-grow-1 d-flex text-bg-primary bg-gradient"
+      style={{ height: 0, overflowY: "auto" }}
+    >
+      <table className="m-auto table table-hover table-striped table-primary small">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">white</th>
+            <th scope="col">black</th>
+          </tr>
+        </thead>
+        <tbody>
+          {historyArray.length === 0 ? (
+            <>
+              <td>1</td>
+              <td></td>
+              <td></td>
+            </>
+          ) : (
+            <>
+              {historyArray.map(({ turn, whiteSan, blackSan = "" }) => (
+                <tr>
+                  <td>{turn}</td>
+                  <td>{whiteSan}</td>
+                  <td>{blackSan}</td>
+                </tr>
+              ))}
+            </>
+          )}
+          <div ref={endTableRef} />
+        </tbody>
+      </table>
     </div>
   );
 }
