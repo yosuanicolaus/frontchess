@@ -48,6 +48,10 @@ export function useApi() {
       return apiGet(`/game/${id}`);
     },
 
+    getGameOpen: function () {
+      return apiGet("/game/open");
+    },
+
     getGameRandomOpen: function () {
       return apiGet("/game/random/open");
     },
