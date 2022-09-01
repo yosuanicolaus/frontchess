@@ -9,10 +9,13 @@ import Game from "./Game/Game";
 import GameCreate from "./Game/GameCreate";
 import Navbar from "./components/Navbar";
 import Login from "./User/Login";
+import UserPage from "./User/User";
 import Test from "./components/Test";
 import { AuthProvider } from "./helper/auth";
 
-const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
 root.render(
   <main className="d-flex flex-column min-vh-100">
     <AuthProvider>
@@ -24,6 +27,7 @@ root.render(
           <Route path="/test" element={<Test />} />
           <Route path="/game" element={<GameCreate />} />
           <Route path="/game/:id" element={<Game />} />
+          <Route path="/user/:uid" element={<UserPage />} />
         </Routes>
       </Router>
     </AuthProvider>

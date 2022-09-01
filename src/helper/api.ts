@@ -76,6 +76,10 @@ export function useApi() {
       return apiGet(`/user/${uid}`);
     },
 
+    getUserByName: function (name: string) {
+      return apiGet(`/user/name/${name}`);
+    },
+
     postChatNew: function () {
       return apiPost("/chat/new");
     },
