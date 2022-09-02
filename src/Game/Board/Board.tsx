@@ -6,13 +6,14 @@ import BackPanels from "./BackPanels";
 import FrontPanels from "./FrontPanels";
 import Pieces from "./Pieces";
 
-type Positions = { x: number; y: number }[][];
+export type Positions = { x: number; y: number }[][];
 
 type ActivePiece = { rank: number; file: number };
 
 interface BoardContextInterface {
   positions: Positions;
   flipped: boolean;
+  animating: Move | null;
   size: number;
   panels: number[][];
   activeMoves: Move[];
@@ -30,6 +31,7 @@ function Board({ size }: { size: number }) {
   const { game, myTurn, playMove } = useGameDB();
   const positions = createPositions(size);
   const [flipped, setFlipped] = useState(uid === game.pblack?.uid);
+  const [animating, setAnimating] = useState<Move | null>(null);
   const [panels, setPanels] = useState(defaultPanels);
   const [activePiece, setActivePiece] = useState<ActivePiece | null>(null);
   const [activeMoves, setActiveMoves] = useState<Move[]>([]);
@@ -85,6 +87,7 @@ function Board({ size }: { size: number }) {
     } else throw new Error("move length is not 1/4?!");
     if (!move) throw new Error("can't find move!");
     playMove(move);
+    setAnimating(move);
   };
 
   const removeFocus = () => {
@@ -95,6 +98,7 @@ function Board({ size }: { size: number }) {
 
   useEffect(() => {
     setPanels(createBoardPanels(game.board));
+    setAnimating(null);
   }, [game.board]);
 
   useEffect(() => {
@@ -119,6 +123,7 @@ function Board({ size }: { size: number }) {
         value={{
           positions,
           flipped,
+          animating,
           size,
           panels,
           activeMoves,
