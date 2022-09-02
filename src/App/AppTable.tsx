@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
-import { useApi } from "../helper/api";
+import { socket } from "../helper/socket";
 import { GameModel } from "../helper/types";
 
 function AppTable() {
-  const { getGameOpen } = useApi();
   const [games, setGames] = useState<GameModel[]>([]);
 
   const lobbyData =
@@ -12,6 +11,7 @@ function AppTable() {
     games.map((game, index) => {
       return {
         idx: index + 1,
+        id: game._id,
         name: game.user0.name,
         elo: game.user0.elo,
         timeControl: game.timeControl,
@@ -19,11 +19,15 @@ function AppTable() {
     });
 
   useEffect(() => {
-    // TODO: create socket connection and listener
-    getGameOpen().then((games) => {
+    socket.emit("join-lobby");
+    socket.on("update-lobby", (games: GameModel[]) => {
       setGames(games);
     });
-  }, [getGameOpen]);
+    return () => {
+      socket.off("update-lobby");
+      socket.emit("leave-lobby");
+    };
+  }, []);
 
   if (!games) return <Loading text="getting open game..." />;
 
