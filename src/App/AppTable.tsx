@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { socket } from "../helper/socket";
 import { GameModel } from "../helper/types";
@@ -44,15 +45,9 @@ function AppTable() {
         </thead>
 
         {lobbyData.length > 0 && (
-          // {/* TODO: make each table row a clickable link */}
           <tbody>
             {lobbyData.map((data) => (
-              <tr key={`lobby-${data.idx}`}>
-                <th scope="row">{data.idx}</th>
-                <td>{data.name}</td>
-                <td>{data.elo}</td>
-                <td>{data.timeControl}</td>
-              </tr>
+              <RowData data={data} />
             ))}
           </tbody>
         )}
@@ -66,6 +61,33 @@ function AppTable() {
         </div>
       )}
     </>
+  );
+}
+
+interface RowDataProps {
+  data: {
+    idx: number;
+    id: string;
+    name: string;
+    elo: number;
+    timeControl: string;
+  };
+}
+
+function RowData({ data }: RowDataProps): JSX.Element {
+  const navigate = useNavigate();
+
+  return (
+    <tr
+      key={`lobby-${data.id}`}
+      style={{ cursor: "pointer" }}
+      onClick={() => navigate(`/game/${data.id}`)}
+    >
+      <th scope="row">{data.idx}</th>
+      <td>{data.name}</td>
+      <td>{data.elo}</td>
+      <td>{data.timeControl}</td>
+    </tr>
   );
 }
 
