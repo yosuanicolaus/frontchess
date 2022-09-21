@@ -4,6 +4,7 @@ import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
 import LoadingPage from "../components/LoadingPage";
 import { firstLogIn, firstSignIn } from "./api";
 import { socket } from "./socket";
+import { User } from "./types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAPLcgqoAOKM3J__Grk7a0lygcMXZ97glo",
@@ -22,7 +23,7 @@ type AuthContextValue = {
   uid: string;
 };
 
-const AuthContext = createContext<AuthContextValue>({} as AuthContextValue);
+const AuthContext = createContext<AuthContextValue>(null!);
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -30,11 +31,6 @@ export function useAuth() {
 
 type AuthProviderProps = {
   children: JSX.Element;
-};
-
-type UserDB = {
-  name: string;
-  uid: string;
 };
 
 export function AuthProvider({ children }: AuthProviderProps) {
@@ -45,28 +41,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // https://firebase.google.com/docs/auth/web/anonymous-auth?authuser=0&hl=en
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      let userDB;
-      if (user) {
+    const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
+      if (authUser) {
         console.log("user is signed in");
-        userDB = await firstLogIn(user.uid);
-      } else {
-        try {
-          console.log("new user detected, signing in anonymously");
-          const credential = await signInAnonymously(auth);
-          userDB = await firstSignIn(credential.user.uid);
-        } catch (error) {
-          console.log(error);
-          window.location.reload();
+        const userDB = (await firstLogIn(authUser.uid)) as User;
+
+        if (userDB) {
+          setup(userDB);
+        } else {
+          const newUser = (await firstSignIn(authUser.uid)) as User;
+          setup(newUser);
         }
+      } else {
+        console.log("new user detected, signing in anonymously");
+        signInAnonymously(auth);
       }
-      if (userDB.name && userDB.uid) setup(userDB);
     });
 
     return unsubscribe;
   }, []);
 
-  const setup = (userDB: UserDB) => {
+  const setup = (userDB: User) => {
     const { name, uid } = userDB;
     socket.emit("setup", { name, uid });
     setUid(uid);
