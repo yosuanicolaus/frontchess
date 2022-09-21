@@ -5,7 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import App from "./App/App";
-import Game from "./Game/Game";
+import GamePage from "./Game/Game";
 import GameCreate from "./Game/GameCreate";
 import Navbar from "./components/Navbar";
 import Login from "./User/Login";
@@ -26,7 +26,7 @@ root.render(
           <Route path="/login" element={<Login />} />
           <Route path="/test" element={<Test />} />
           <Route path="/game" element={<GameCreate />} />
-          <Route path="/game/:id" element={<Game />} />
+          <Route path="/game/:id" element={<GamePage />} />
           <Route path="/user/:uid" element={<UserPage />} />
         </Routes>
       </Router>

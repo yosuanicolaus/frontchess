@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { socket } from "../helper/socket";
-import { GameModel } from "../helper/types";
+import { Game } from "../helper/types";
 
 function AppTable() {
-  const [games, setGames] = useState<GameModel[]>([]);
+  const [games, setGames] = useState<Game[]>([]);
 
   const lobbyData =
     games &&
@@ -21,7 +21,7 @@ function AppTable() {
 
   useEffect(() => {
     socket.emit("join-lobby");
-    socket.on("update-lobby", (games: GameModel[]) => {
+    socket.on("update-lobby", (games: Game[]) => {
       setGames(games);
     });
     return () => {

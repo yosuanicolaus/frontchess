@@ -4,7 +4,7 @@ import GameBoard from "./GameBoard";
 import GameChat from "./GameChat";
 import GameInfo from "./GameInfo";
 
-function Game() {
+function GamePage() {
   const { id } = useParams();
   if (!id) return <>id params not detected</>;
 
@@ -32,4 +32,4 @@ function Game() {
   );
 }
 
-export default Game;
+export default GamePage;

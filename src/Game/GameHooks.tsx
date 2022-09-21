@@ -2,10 +2,10 @@ import React, { useState, useEffect, createContext, useContext } from "react";
 import LoadingPage from "../components/LoadingPage";
 import { useAuth } from "../helper/auth";
 import { useSocket } from "../helper/socket";
-import { GameModel, Move } from "../helper/types";
+import { Game, Move } from "../helper/types";
 
 interface GameContextInterface {
-  game: GameModel;
+  game: Game;
   myTurn: boolean;
   toggleReady: () => void;
   startGame: () => void;
@@ -27,7 +27,7 @@ interface GameProviderProps {
 
 export function GameProvider({ id, children }: GameProviderProps) {
   const { uid } = useAuth();
-  const [game, setGame] = useState<GameModel | null>(null);
+  const [game, setGame] = useState<Game | null>(null);
   const socket = useSocket(id);
   const myTurn =
     (uid === game?.pwhite?.uid && game.turn === "w") ||
@@ -37,9 +37,10 @@ export function GameProvider({ id, children }: GameProviderProps) {
     if (!id || !socket) return;
     socket.emit("join-game", { id });
 
-    socket.on("update-game", (game: GameModel) => {
+    socket.on("update-game", (game: Game, lastMove: Move) => {
       console.log("updating game state");
       setGame(game);
+      console.log(lastMove);
     });
 
     return () => {
