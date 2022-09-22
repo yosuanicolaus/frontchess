@@ -6,6 +6,7 @@ import { Game, Move } from "../helper/types";
 
 interface GameContextInterface {
   game: Game;
+  lastMove: Move | null;
   myTurn: boolean;
   toggleReady: () => void;
   startGame: () => void;
@@ -28,6 +29,7 @@ interface GameProviderProps {
 export function GameProvider({ id, children }: GameProviderProps) {
   const { uid } = useAuth();
   const [game, setGame] = useState<Game | null>(null);
+  const [lastMove, setLastMove] = useState<Move | null>(null);
   const socket = useSocket(id);
   const myTurn =
     (uid === game?.pwhite?.uid && game.turn === "w") ||
@@ -39,8 +41,11 @@ export function GameProvider({ id, children }: GameProviderProps) {
 
     socket.on("update-game", (game: Game, lastMove: Move) => {
       console.log("updating game state");
+      if (lastMove) {
+        setLastMove(lastMove);
+        console.log(lastMove);
+      }
       setGame(game);
-      console.log(lastMove);
     });
 
     return () => {
@@ -53,14 +58,15 @@ export function GameProvider({ id, children }: GameProviderProps) {
 
   const value = {
     game,
+    lastMove,
     myTurn,
-    toggleReady: function () {
+    toggleReady: () => {
       socket.emit("toggle", { id });
     },
-    startGame: function () {
+    startGame: () => {
       socket.emit("start", { id });
     },
-    playMove: function (move: Move) {
+    playMove: (move: Move) => {
       socket.emit("play", { id, move });
     },
   };

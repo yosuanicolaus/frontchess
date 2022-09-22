@@ -77,10 +77,10 @@ interface RFPanelInterface extends NormalPanelInterface {
 }
 
 function PiecePanel({ x, y, size, rank, file }: RFPanelInterface) {
-  const { getMovesFromRankFile } = useBoard();
+  const { setMovesFromRankFile } = useBoard();
 
   const handleClick = () => {
-    getMovesFromRankFile(rank, file);
+    setMovesFromRankFile(rank, file);
   };
 
   return <Panel x={x} y={y} size={size} onClick={handleClick} />;

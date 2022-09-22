@@ -5,13 +5,15 @@ import { useBoard } from "./Board";
 
 export default function Pieces() {
   const { game } = useGameDB();
-  const { positions, size, flipped } = useBoard();
+  const { positions, size, flipped, animating } = useBoard();
   const pieceSize = size / 8;
   const board = game.board;
   const pieces: JSX.Element[] = [];
 
   for (let rank = 0; rank < 8; rank++) {
     for (let file = 0; file < 8; file++) {
+      const pieceActive =
+        animating?.to.rank === rank && animating?.to.file === file;
       const r = flipped ? 7 - rank : rank;
       const f = flipped ? 7 - file : file;
       const boardCode = board[r][f];
@@ -23,6 +25,7 @@ export default function Pieces() {
           x={x}
           y={y}
           size={pieceSize}
+          active={pieceActive}
           key={`${boardCode}-${rank}-${file}`}
         />
       );
@@ -36,35 +39,49 @@ type PieceProps = {
   x: number;
   y: number;
   size: number;
+  active: boolean;
 };
 
-function Piece({ boardCode, x, y, size }: PieceProps) {
+function Piece({ boardCode, x, y, size, active }: PieceProps) {
   const { animating, positions, flipped } = useBoard();
   const svgCode = getPieceSvgCode(boardCode);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  const [animatingPos, setAnimatingPos] = useState({ x: 0, y: 0 });
 
   const animateMove = (move: Move) => {
-    let { rank, file } = move.to;
-    const r = flipped ? 7 - rank : rank;
-    const f = flipped ? 7 - file : file;
-    const { x: toX, y: toY } = positions[r][f];
-    setOffset({
-      x: toX - x,
-      y: toY - y,
-    });
+    const { rank: fromRank, file: fromFile } = move.from;
+    const fromR = flipped ? 7 - fromRank : fromRank;
+    const fromF = flipped ? 7 - fromFile : fromFile;
+    const { x: fromX, y: fromY } = positions[fromR][fromF];
+
+    const { rank: toRank, file: toFile } = move.to;
+    const toR = flipped ? 7 - toRank : toRank;
+    const toF = flipped ? 7 - toFile : toFile;
+    const { x: toX, y: toY } = positions[toR][toF];
+
+    const animationDuration = 500;
+    const animationSteps = 25;
+    let step = 0;
+
+    const intervalID = setInterval(() => {
+      step += animationSteps;
+      if (step < animationDuration) {
+        setAnimatingPos({
+          x: lerp(fromX, toX, step / animationDuration),
+          y: lerp(fromY, toY, step / animationDuration),
+        });
+      } else {
+        clearInterval(intervalID);
+      }
+    }, animationSteps);
   };
 
+  const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
   useEffect(() => {
-    if (animating) {
-      const move = animating;
-      const { rank, file } = move.from;
-      const r = flipped ? 7 - rank : rank;
-      const f = flipped ? 7 - file : file;
-      if (positions[r][f].x === x && positions[r][f].y === y) {
-        console.log("This!");
-        console.log({ x, y, boardCode });
-        animateMove(move);
-      }
+    if (active && animating) {
+      console.log({ x, y, boardCode });
+      animateMove(animating);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [animating]);
@@ -75,11 +92,10 @@ function Piece({ boardCode, x, y, size }: PieceProps) {
       alt={svgCode}
       style={{
         position: "absolute",
-        left: x + offset.x,
-        top: y + offset.y,
+        left: active ? animatingPos.x : x,
+        top: active ? animatingPos.y : y,
         width: size,
         height: size,
-        transition: animating ? "left .5s, top .5s" : "",
       }}
     />
   );

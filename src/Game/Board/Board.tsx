@@ -18,7 +18,7 @@ interface BoardContextInterface {
   panels: number[][];
   activeMoves: Move[];
   activePiece: ActivePiece | null;
-  getMovesFromRankFile: (rank: number, file: number) => void;
+  setMovesFromRankFile: (rank: number, file: number) => void;
   removeFocus: () => void;
   playRankFile: (toRank: number, toFile: number) => void;
 }
@@ -28,7 +28,7 @@ export const useBoard = () => useContext(BoardContext);
 
 function Board({ size }: { size: number }) {
   const { uid } = useAuth();
-  const { game, myTurn, playMove } = useGameDB();
+  const { game, myTurn, playMove, lastMove } = useGameDB();
   const positions = createPositions(size);
   const [flipped, setFlipped] = useState(uid === game.pblack?.uid);
   const [animating, setAnimating] = useState<Move | null>(null);
@@ -36,7 +36,7 @@ function Board({ size }: { size: number }) {
   const [activePiece, setActivePiece] = useState<ActivePiece | null>(null);
   const [activeMoves, setActiveMoves] = useState<Move[]>([]);
 
-  const getMovesFromRankFile = (rank: number, file: number) => {
+  const setMovesFromRankFile = (rank: number, file: number) => {
     if (activePiece && activePiece.rank === rank && activePiece.file === file) {
       return removeFocus();
     }
@@ -87,7 +87,7 @@ function Board({ size }: { size: number }) {
     } else throw new Error("move length is not 1/4?!");
     if (!move) throw new Error("can't find move!");
     playMove(move);
-    setAnimating(move);
+    // setAnimating(move);
   };
 
   const removeFocus = () => {
@@ -98,8 +98,17 @@ function Board({ size }: { size: number }) {
 
   useEffect(() => {
     setPanels(createBoardPanels(game.board));
-    setAnimating(null);
+    // setAnimating(null);
   }, [game.board]);
+
+  useEffect(() => {
+    if (lastMove) {
+      setAnimating(lastMove);
+      setTimeout(() => {
+        setAnimating(null);
+      }, 500);
+    }
+  }, [lastMove]);
 
   useEffect(() => {
     document.onkeydown = (e) => {
@@ -128,7 +137,7 @@ function Board({ size }: { size: number }) {
           panels,
           activeMoves,
           activePiece,
-          getMovesFromRankFile,
+          setMovesFromRankFile,
           removeFocus,
           playRankFile,
         }}
