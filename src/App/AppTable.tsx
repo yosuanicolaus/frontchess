@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
-import { socket } from "../helper/socket";
-import { Game } from "../helper/types";
+import { socket } from "../lib/socket";
+import { Game } from "../lib/types";
 
 function AppTable() {
   const [games, setGames] = useState<Game[]>([]);

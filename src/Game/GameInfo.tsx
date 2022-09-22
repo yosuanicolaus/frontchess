@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "../helper/auth";
-import { Player, User } from "../helper/types";
+import { useAuth } from "../lib/auth";
+import { Player, User } from "../lib/types";
 import { useGameDB } from "./GameHooks";
 
 function GameInfo() {

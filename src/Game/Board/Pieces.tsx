@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Move } from "../../helper/types";
+import { Move } from "../../lib/types";
 import { useGameDB } from "../GameHooks";
 import { useBoard } from "./Board";
 

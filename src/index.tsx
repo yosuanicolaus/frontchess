@@ -11,7 +11,7 @@ import Navbar from "./components/Navbar";
 import Login from "./User/Login";
 import UserPage from "./User/User";
 import Test from "./components/Test";
-import { AuthProvider } from "./helper/auth";
+import { AuthProvider } from "./lib/auth";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

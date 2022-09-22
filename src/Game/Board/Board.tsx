@@ -1,6 +1,6 @@
 import { useState, useEffect, createContext, useContext } from "react";
-import { useAuth } from "../../helper/auth";
-import { Move } from "../../helper/types";
+import { useAuth } from "../../lib/auth";
+import { Move } from "../../lib/types";
 import { useGameDB } from "../GameHooks";
 import BackPanels from "./BackPanels";
 import FrontPanels from "./FrontPanels";

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, createContext, useContext } from "react";
 import LoadingPage from "../components/LoadingPage";
-import { useAuth } from "../helper/auth";
-import { useSocket } from "../helper/socket";
-import { Game, Move } from "../helper/types";
+import { useAuth } from "../lib/auth";
+import { useSocket } from "../lib/socket";
+import { Game, Move } from "../lib/types";
 
 interface GameContextInterface {
   game: Game;

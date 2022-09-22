@@ -5,7 +5,7 @@ import {
   SetStateAction,
   ChangeEvent,
 } from "react";
-import { useDimensions } from "../helper/dimensions";
+import { useDimensions } from "../lib/hooks/dimensions";
 import { useGameDB } from "./GameHooks";
 import BoardEmpty from "./BoardState/BoardEmpty";
 import BoardWaiting from "./BoardState/BoardWaiting";

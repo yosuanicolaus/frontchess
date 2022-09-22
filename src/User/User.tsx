@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import LoadingPage from "../components/LoadingPage";
-import { useApi } from "../helper/api";
-import { User } from "../helper/types";
+import { useApi } from "../lib/api";
+import { User } from "../lib/types";
 
 export default function UserPage() {
   const { uid } = useParams();

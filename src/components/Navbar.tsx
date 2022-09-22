@@ -1,6 +1,6 @@
 import { MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../helper/auth";
+import { useAuth } from "../lib/auth";
 
 function Navbar() {
   const navigate = useNavigate();
