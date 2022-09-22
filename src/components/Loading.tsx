@@ -1,4 +1,5 @@
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { Dispatch, SetStateAction } from "react";
+import { useLoadingCursor } from "../lib/hooks/LoadingCursor";
 
 interface Props {
   text?: string;
@@ -6,12 +7,7 @@ interface Props {
 }
 
 function Loading({ text, setLoading }: Props) {
-  useEffect(() => {
-    document.body.style.cursor = "wait";
-    return () => {
-      document.body.style.cursor = "default";
-    };
-  }, []);
+  useLoadingCursor();
 
   if (!text) return <span className="spinner-border spinner-border-sm"></span>;
 
@@ -20,9 +16,12 @@ function Loading({ text, setLoading }: Props) {
       <span className="spinner-border text-primary"></span>
       <span className="mx-3 my-auto lead">{text}</span>
       {setLoading && (
-        <button className="btn btn-sm btn-outline-dark" onClick={() => {
-          setLoading(null);
-        }}>
+        <button
+          className="btn btn-sm btn-outline-dark"
+          onClick={() => {
+            setLoading(null);
+          }}
+        >
           Cancel
         </button>
       )}
